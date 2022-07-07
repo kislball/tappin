@@ -15,7 +15,9 @@ export interface Service<T = any> {
 /** DSL used to create service */
 export interface ServiceDsl<T = any> {
   /** Adds dependencies to this DSL */
-  inject: (...tokens: Array<symbol | string | { token: symbol | string }>) => ServiceDsl<T>;
+  inject: (
+    ...tokens: Array<symbol | string | { token: symbol | string }>
+  ) => ServiceDsl<T>;
   /** Sets scope */
   scope: (scope: Scope) => ServiceDsl<T>;
   /** Sets injection token */
@@ -35,7 +37,9 @@ export const createServiceDsl = <T = any>(s?: Service<T>): ServiceDsl<T> => {
     scope: Scope.Singleton,
   };
 
-  const inject = (...tokens: Array<symbol | string | { token: symbol | string }>): ServiceDsl<T> => {
+  const inject = (
+    ...tokens: Array<symbol | string | { token: symbol | string }>
+  ): ServiceDsl<T> => {
     service.inject = [...service.inject, ...tokens];
     return createServiceDsl(service);
   };

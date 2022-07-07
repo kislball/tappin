@@ -17,7 +17,9 @@ export const createContainerHelper = (
     tokens: Array<symbol | string | { token: symbol | string }>,
     f: (...deps: any[]) => T | Promise<T>,
   ): Promise<T> => {
-    const deps = tokens.map((e) => container.resolve((e as { token: symbol | string }).token ?? e));
+    const deps = tokens.map((e) =>
+      container.resolve((e as { token: symbol | string }).token ?? e)
+    );
     const rDeps = [];
 
     for await (const dep of deps) {
