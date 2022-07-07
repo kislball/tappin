@@ -1,21 +1,19 @@
 /** @jsx h */
-import { h } from "preact";
+/** @jsxFrag Fragment */
+import { h, Fragment } from "preact";
 import { tw } from "@twind";
-import Counter from "../islands/Counter.tsx";
+import { Head } from "https://deno.land/x/fresh@1.0.1/runtime.ts";
 
 export default function Home() {
   return (
-    <div class={tw`p-4 mx-auto max-w-screen-md`}>
-      <img
-        src="/logo.svg"
-        height="100px"
-        alt="the fresh logo: a sliced lemon dripping with juice"
-      />
-      <p class={tw`my-6`}>
-        Welcome to `fresh`. Try update this message in the ./routes/index.tsx
-        file, and refresh.
-      </p>
-      <Counter start={3} />
-    </div>
-  );
+    <>
+      <Head>
+        <title>Tappin</title>
+      </Head>
+      <div className={tw`w-screen h-screen flex flex-col text-center items-center justify-center`}>
+        <p>Tappin will soon be released.</p>
+        <p>Stay tuned</p>
+      </div>
+    </>
+  )
 }
