@@ -1,4 +1,4 @@
-import { createContainer } from "./container/container.ts";
+import { Container, createContainer } from "./container/container.ts";
 import { createProvide } from "./container/helper.ts";
 import { createModule, Module } from "./module.ts";
 import { Service } from "./service.ts";
@@ -9,6 +9,8 @@ import { rootModuleServiceTemplate } from "./services/root-module-service.ts";
 export interface AppFactory {
   /** Initializes and starts app */
   init: () => Promise<void>;
+  /** Returns container */
+  container: () => Container
 }
 
 /** Creates a new factory */
@@ -49,7 +51,7 @@ export const createFactory = (root: Module): AppFactory => {
     await initModule(factoryModule);
   };
 
-  return { init };
+  return { init, container: () => appContainer };
 };
 
 /** Creates a factory and starts application */
