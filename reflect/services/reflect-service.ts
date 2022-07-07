@@ -21,9 +21,9 @@ export const reflectService = createService<ReflectService>((dsl) =>
       const result: Module[] = [];
 
       const go = (m: Module) => {
+        if (f(m)) result.push(m);
+        
         for (const sub of m.imports) {
-          if (f(sub)) result.push(sub);
-
           go(sub);
         }
       };
@@ -38,9 +38,9 @@ export const reflectService = createService<ReflectService>((dsl) =>
       const go = (m: Module) => {
         for (const service of m.services) {
           if (f(service)) result.push(service);
-          for (const impor of m.imports) {
-            go(impor);
-          }
+        }
+        for (const impor of m.imports) {
+          go(impor);
         }
       };
 
