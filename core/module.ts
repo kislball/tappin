@@ -43,13 +43,6 @@ export const createModuleDsl = (module?: Module): ModuleDsl => {
   };
 };
 
-/** Creates a module template */
-export const createModuleTemplate = (
-  f1: (dsl: ModuleDsl) => ModuleDsl = (d) => d,
-) =>
-  (f2: (dsl: ModuleDsl) => ModuleDsl = (d) => d) =>
-    f2(f1(createModuleDsl())).build();
-
 /** Creates a module */
 export const createModule = (
   f: (dsl: ModuleDsl) => ModuleDsl = (d) => d,

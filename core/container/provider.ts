@@ -44,7 +44,7 @@ export interface AsyncFactoryProvider<T> extends BaseProvider {
 export const isAsyncFactoryProvider = (
   t: any,
 ): t is AsyncFactoryProvider<any> =>
-  t.useAsyncFactory !== undefined && typeof t.useFactory === "function";
+  t.useAsyncFactory !== undefined && typeof t.useAsyncFactory === "function";
 
 /** Common provider type */
 export type Provider<T> =

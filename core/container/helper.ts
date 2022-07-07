@@ -14,10 +14,10 @@ export const createContainerHelper = (
   container: Container,
 ) => ({
   provide: async <T>(
-    tokens: Array<symbol | string>,
+    tokens: Array<symbol | string | { token: symbol | string }>,
     f: (...deps: any[]) => T | Promise<T>,
   ): Promise<T> => {
-    const deps = tokens.map((e) => container.resolve(e));
+    const deps = tokens.map((e) => container.resolve((e as { token: symbol | string }).token ?? e));
     const rDeps = [];
 
     for await (const dep of deps) {
@@ -30,10 +30,10 @@ export const createContainerHelper = (
 
 /** Returns a function, which accepts container and executes given function with injected tokens */
 export const createProvide = <T>(
-  tokens: Array<symbol | string>,
+  tokens: Array<symbol | string | { token: symbol | string }>,
   f: (...deps: any[]) => T | Promise<T>,
 ) =>
   (container: Container) => {
     const helper = createContainerHelper(container);
-    return () => helper.provide(tokens, f);
+    return helper.provide(tokens, f);
   };

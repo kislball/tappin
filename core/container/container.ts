@@ -9,7 +9,7 @@ import {
 /** Dependency injection container */
 export interface Container {
   /** Adds a new provider to container */
-  register: <T>(provider: Provider<T>) => Promise<void>;
+  register: <T>(provider: Provider<T>) => Promise<void> | void;
   /** Resolves a provider */
   resolve: <T>(token: string | symbol) => Promise<T>;
   /** Cleans up singletons */
@@ -19,7 +19,7 @@ export interface Container {
   /** Resets container */
   reset: () => void;
   /** Forcefully initializes all singletons */
-  forceInit: () => Promise<void>;
+  forceInit: (which?: Array<string | symbol>) => Promise<void>;
 }
 
 /** Creates a default container */
@@ -30,8 +30,12 @@ export const createContainer = (
   const providers = provs ?? new Map<string | symbol, Provider<unknown>>();
   const singletons = singles ?? new Map<string | symbol, unknown>();
 
-  const forceInit = async () => {
-    for (const provider of providers.values()) {
+  const forceInit = async (which: Array<string | symbol> = []) => {
+    for (
+      const provider of [...providers.values()].filter((e) =>
+        which.length == 0 || which.includes(e.token)
+      )
+    ) {
       if (provider.scope === Scope.Singleton) {
         await getSingleton(provider);
       }
@@ -64,7 +68,7 @@ export const createContainer = (
     }
   };
 
-  const register = async <T>(provider: Provider<T>) => {
+  const register = <T>(provider: Provider<T>) => {
     const scope = provider.scope ?? Scope.Singleton;
     if (scope !== Scope.Singleton && isValueProvider(provider)) {
       throw new Error(
@@ -73,10 +77,6 @@ export const createContainer = (
     }
 
     providers.set(provider.token, provider);
-
-    if (scope === Scope.Singleton) {
-      await getSingleton(provider)
-    }
   };
 
   const resolve = <T>(

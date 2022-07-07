@@ -3,7 +3,7 @@ import { Scope } from "./container/provider.ts";
 /** Service */
 export interface Service<T = any> {
   /** Dependencies of this service */
-  inject: Array<symbol | string>;
+  inject: Array<symbol | string | { token: symbol | string }>;
   /** Service's scope */
   scope: Scope;
   /** Function used to provide this service */
@@ -15,7 +15,7 @@ export interface Service<T = any> {
 /** DSL used to create service */
 export interface ServiceDsl<T = any> {
   /** Adds dependencies to this DSL */
-  inject: (...tokens: Array<symbol | string>) => ServiceDsl<T>;
+  inject: (...tokens: Array<symbol | string | { token: symbol | string }>) => ServiceDsl<T>;
   /** Sets scope */
   scope: (scope: Scope) => ServiceDsl<T>;
   /** Sets injection token */
@@ -35,7 +35,7 @@ export const createServiceDsl = <T = any>(s?: Service<T>): ServiceDsl<T> => {
     scope: Scope.Singleton,
   };
 
-  const inject = (...tokens: Array<symbol | string>): ServiceDsl<T> => {
+  const inject = (...tokens: Array<symbol | string | { token: symbol | string }>): ServiceDsl<T> => {
     service.inject = [...service.inject, ...tokens];
     return createServiceDsl(service);
   };
@@ -45,7 +45,7 @@ export const createServiceDsl = <T = any>(s?: Service<T>): ServiceDsl<T> => {
     return createServiceDsl(service);
   };
 
-  const tokenFunction = (token: string | symbol): ServiceDsl<T> => {
+  const tokenFunction = (token: symbol | string): ServiceDsl<T> => {
     service.token = token;
     return createServiceDsl(service);
   };
@@ -69,11 +69,13 @@ export const createServiceDsl = <T = any>(s?: Service<T>): ServiceDsl<T> => {
 };
 
 /** Creates service template */
-export const creatServiceTemplate = <T>(
+export const createServiceTemplate = <T>(
   f1: (dsl: ServiceDsl<T>) => ServiceDsl<T> = (d) => d,
-) =>
-  (f2: (dsl: ServiceDsl<T>) => ServiceDsl<T> = (d) => d) =>
-    f2(f1(createServiceDsl()));
+) => ((
+  f2: (dsl: Omit<ServiceDsl<T>, "token">) => Omit<ServiceDsl<T>, "token"> = (
+    d,
+  ) => d,
+) => f2(f1(createServiceDsl())).build());
 
 /** Creates service */
 export const createService = <T>(
