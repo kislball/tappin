@@ -1,0 +1,10 @@
+{
+  "tasks": {
+    "pretty": "deno fmt; deno lint"
+  },
+  "lint": {
+    "rules": {
+      "exclude": ["no-explicit-any"]
+    }
+  }
+}
