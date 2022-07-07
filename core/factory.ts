@@ -10,7 +10,7 @@ export interface AppFactory {
   /** Initializes and starts app */
   init: () => Promise<void>;
   /** Returns container */
-  container: () => Container
+  container: () => Container;
 }
 
 /** Creates a new factory */

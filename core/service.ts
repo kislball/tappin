@@ -10,6 +10,8 @@ export interface Service<T = any> {
   provider: (...deps: any[]) => Promise<T> | T;
   /** Service token */
   token: string | symbol;
+  /** Metadata */
+  metadata: Map<string | symbol, unknown>;
 }
 
 /** DSL used to create service */
@@ -26,6 +28,10 @@ export interface ServiceDsl<T = any> {
   provide: (f: (...deps: any[]) => Promise<T> | T) => ServiceDsl<T>;
   /** Compiles service */
   build: () => Service<T>;
+  /** Sets metadata */
+  set: <V>(key: string, value: V) => ServiceDsl<T>;
+  /** Applies DSL */
+  apply: (f: (dsl: ServiceDsl<T>) => ServiceDsl<T>) => void
 }
 
 /** Creates service dsl */
@@ -35,6 +41,7 @@ export const createServiceDsl = <T = any>(s?: Service<T>): ServiceDsl<T> => {
     token: token(),
     provider: () => undefined as any,
     scope: Scope.Singleton,
+    metadata: new Map(),
   };
 
   const inject = (
@@ -61,6 +68,15 @@ export const createServiceDsl = <T = any>(s?: Service<T>): ServiceDsl<T> => {
     return createServiceDsl(service);
   };
 
+  const set = <T>(key: string, value: T) => {
+    service.metadata.set(key, value);
+    return createServiceDsl(service);
+  };
+
+  const apply = (f: (dsl: ServiceDsl<T>) => ServiceDsl<T>) => {
+    return f(createServiceDsl(service))
+  }
+
   const build = (): Service<T> => service;
 
   return {
@@ -69,6 +85,8 @@ export const createServiceDsl = <T = any>(s?: Service<T>): ServiceDsl<T> => {
     token: tokenFunction,
     provide,
     build,
+    set,
+    apply,
   };
 };
 
