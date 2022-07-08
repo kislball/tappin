@@ -1,8 +1,8 @@
 import { Container } from "./container/container.ts";
-import { createServiceTemplate, token } from "./service.ts";
+import { createTemplate, token } from "./service.ts";
 
 export const dependencyContainerToken = token("DependencyContainer");
 
-export const containerServiceTemplate = createServiceTemplate<Container>(
+export const containerServiceTemplate = createTemplate<Container>(
   (dsl) => dsl.token(dependencyContainerToken),
 );

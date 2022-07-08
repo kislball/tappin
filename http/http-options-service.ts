@@ -1,4 +1,4 @@
-import { createServiceTemplate, token } from "../core/mod.ts";
+import { createTemplate, token } from "../core/mod.ts";
 
 export interface HttpOptionsService {
   hostname?: string
@@ -7,7 +7,7 @@ export interface HttpOptionsService {
 
 export const httpOptionsToken = token("HttpOptions");
 
-export const httpOptionsServiceTemplate = createServiceTemplate<HttpOptionsService>((dsl) =>
+export const httpOptionsServiceTemplate = createTemplate<HttpOptionsService>((dsl) =>
   dsl
     .token(httpOptionsToken)
 );

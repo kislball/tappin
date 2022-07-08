@@ -98,14 +98,24 @@ export const createServiceDsl = <T = any>(s?: Service<T>): ServiceDsl<T> => {
   };
 };
 
-/** Creates service template */
-export const createServiceTemplate = <T>(
+/** Creates raw service template */
+export const createRawTemplate = <T>(
   f1: (dsl: ServiceDsl<T>) => ServiceDsl<T> = (d) => d,
 ) => ((
   f2: (dsl: Omit<ServiceDsl<T>, "token">) => Omit<ServiceDsl<T>, "token"> = (
     d,
   ) => d,
 ) => f2(f1(createServiceDsl())).build());
+
+export const createTemplate = <T>(f1: (dsl: ServiceDsl<T>) => ServiceDsl<T> = (d) => d) => {
+  // deno-lint-ignore ban-ts-comment
+  // @ts-ignore
+  const raw: ReturnType<typeof createRawTemplate<T>> & { token: Token } = createRawTemplate(f1)
+
+  raw.token = f1(createServiceDsl()).build().token
+
+  return raw
+}
 
 /** Creates service */
 export const createService = <T>(
