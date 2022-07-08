@@ -8,8 +8,8 @@ export const config: Configuration = {
   mode: "silent",
   theme: {
     colors: {
-      paper: '#FFF5C1',
-      black: 'rgba(0, 0, 0, 0.14)',
+      paper: "#FFF5C1",
+      black: "rgba(0, 0, 0, 0.14)",
     },
   },
 };
