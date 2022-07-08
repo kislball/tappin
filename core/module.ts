@@ -49,8 +49,8 @@ export const createModuleDsl = (module?: Module): ModuleDsl => {
   };
 
   const apply = (f: (dsl: ModuleDsl) => ModuleDsl) => {
-    return f(createModuleDsl(m))
-  }
+    return f(createModuleDsl(m));
+  };
 
   return {
     build,

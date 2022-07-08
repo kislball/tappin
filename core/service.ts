@@ -31,7 +31,7 @@ export interface ServiceDsl<T = any> {
   /** Sets metadata */
   set: <V>(key: string, value: V) => ServiceDsl<T>;
   /** Applies DSL */
-  apply: (f: (dsl: ServiceDsl<T>) => ServiceDsl<T>) => void
+  apply: (f: (dsl: ServiceDsl<T>) => ServiceDsl<T>) => void;
 }
 
 /** Creates service dsl */
@@ -74,8 +74,8 @@ export const createServiceDsl = <T = any>(s?: Service<T>): ServiceDsl<T> => {
   };
 
   const apply = (f: (dsl: ServiceDsl<T>) => ServiceDsl<T>) => {
-    return f(createServiceDsl(service))
-  }
+    return f(createServiceDsl(service));
+  };
 
   const build = (): Service<T> => service;
 

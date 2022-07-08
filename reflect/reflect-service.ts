@@ -4,7 +4,7 @@ import {
   rootModuleToken,
   Service,
   token,
-} from "../../core/mod.ts";
+} from "../core/mod.ts";
 
 export interface ReflectService {
   getModules(f?: (m: Module) => boolean): Module[];
@@ -22,7 +22,7 @@ export const reflectService = createService<ReflectService>((dsl) =>
 
       const go = (m: Module) => {
         if (f(m)) result.push(m);
-        
+
         for (const sub of m.imports) {
           go(sub);
         }

@@ -2,8 +2,8 @@ import { Container, createContainer } from "./container/container.ts";
 import { createProvide } from "./container/helper.ts";
 import { createModule, Module } from "./module.ts";
 import { Service } from "./service.ts";
-import { containerServiceTemplate } from "./services/container-service.ts";
-import { rootModuleServiceTemplate } from "./services/root-module-service.ts";
+import { containerServiceTemplate } from "./container-service.ts";
+import { rootModuleServiceTemplate } from "./root-module-service.ts";
 
 /** Creates application from root module */
 export interface AppFactory {
