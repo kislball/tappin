@@ -11,6 +11,8 @@ export interface AppFactory {
   init: () => Promise<void>;
   /** Returns container */
   container: () => Container;
+  /** Returns root module */
+  root: () => Module;
 }
 
 /** Creates a new factory */
@@ -51,7 +53,7 @@ export const createFactory = (root: Module): AppFactory => {
     await initModule(factoryModule);
   };
 
-  return { init, container: () => appContainer };
+  return { init, container: () => appContainer, root: () => root };
 };
 
 /** Creates a factory and starts application */
