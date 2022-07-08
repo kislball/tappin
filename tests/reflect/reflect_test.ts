@@ -84,3 +84,19 @@ Deno.test("gets all services with given metadata", async () => {
 
   assertEquals(value, 1);
 });
+
+Deno.test("gets root module", async () => {
+  const notRoot = createModule();
+  const root = createModule((dsl) => dsl.import(notRoot).import(reflectModule));
+
+  const factory = createFactory(root);
+  await factory.init();
+
+  const moduleRoot = await createContainerHelper(factory.container()).provide([
+    reflectService,
+  ], (reflect: ReflectService) => {
+    return reflect.getRoot();
+  });
+
+  assertEquals(moduleRoot.token, root.token);
+});

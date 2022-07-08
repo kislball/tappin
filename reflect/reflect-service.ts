@@ -9,6 +9,7 @@ import {
 export interface ReflectService {
   getModules(f?: (m: Module) => boolean): Module[];
   getServices(f?: (s: Service) => boolean): Service[];
+  getRoot(): Module;
 }
 
 export const reflectServiceToken = token("ReflectService");
@@ -17,6 +18,7 @@ export const reflectService = createService<ReflectService>((dsl) =>
   dsl.token(reflectServiceToken).inject(rootModuleToken).provide((
     root: Module,
   ) => ({
+    getRoot: () => root,
     getModules: (f = () => true) => {
       const result: Module[] = [];
 
