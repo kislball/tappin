@@ -12,6 +12,8 @@ export interface ModuleDsl {
   set: <T>(key: string, value: T) => ModuleDsl;
   /** Applies given DSL to this DSL */
   apply: (f: (dsl: ModuleDsl) => ModuleDsl) => ModuleDsl;
+  /** Changes name of this module */
+  name: (name: string) => ModuleDsl;
 }
 
 /** Module */
@@ -52,12 +54,18 @@ export const createModuleDsl = (module?: Module): ModuleDsl => {
     return f(createModuleDsl(m));
   };
 
+  const name = (n: string) => {
+    m.token = Symbol(`Module(${n})`)
+    return createModuleDsl(m);
+  }
+
   return {
     build,
     import: $import,
     service,
     set,
     apply,
+    name,
   };
 };
 
