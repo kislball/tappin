@@ -1,10 +1,11 @@
+import { resolveToken, TokenResolvable } from "../service.ts";
 import { Container } from "./container.ts";
 
 /** Wrapper around container */
 export interface ContainerHelper {
   /** Provides given function with dependencies resolved by tokens in first array */
   provide: <T>(
-    tokens: Array<symbol | string>,
+    tokens: Array<TokenResolvable>,
     f: (...deps: any[]) => T | Promise<T>,
   ) => Promise<T>;
 }
@@ -14,11 +15,11 @@ export const createContainerHelper = (
   container: Container,
 ) => ({
   provide: async <T>(
-    tokens: Array<symbol | string | { token: symbol | string }>,
+    tokens: Array<TokenResolvable>,
     f: (...deps: any[]) => T | Promise<T>,
   ): Promise<T> => {
     const deps = tokens.map((e) =>
-      container.resolve((e as { token: symbol | string }).token ?? e)
+      container.resolve(resolveToken(e))
     );
     const rDeps = [];
 
@@ -32,7 +33,7 @@ export const createContainerHelper = (
 
 /** Returns a function, which accepts container and executes given function with injected tokens */
 export const createProvide = <T>(
-  tokens: Array<symbol | string | { token: symbol | string }>,
+  tokens: Array<TokenResolvable>,
   f: (...deps: any[]) => T | Promise<T>,
 ) =>
   (container: Container) => {

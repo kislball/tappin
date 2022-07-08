@@ -1,5 +1,13 @@
 import { Scope } from "./container/provider.ts";
 
+/** A simpl, unique token */
+export type Token = symbol | string
+
+/** Resolvable token */
+export type TokenResolvable = Token | { token: Token }
+
+export const resolveToken = (t: TokenResolvable): string | symbol => (t as { token: string | symbol }).token ?? t
+
 /** Service */
 export interface Service<T = any> {
   /** Dependencies of this service */
