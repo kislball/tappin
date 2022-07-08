@@ -82,7 +82,7 @@ Deno.test("gets all services with given metadata", async () => {
     return services.length;
   });
 
-  assertEquals(value, 1);
+  assertEquals(value, 2);
 });
 
 Deno.test("gets root module", async () => {
