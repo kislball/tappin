@@ -1,12 +1,13 @@
 import { Scope } from "./container/provider.ts";
 
 /** A simpl, unique token */
-export type Token = symbol | string
+export type Token = symbol | string;
 
 /** Resolvable token */
-export type TokenResolvable = Token | { token: Token }
+export type TokenResolvable = Token | { token: Token };
 
-export const resolveToken = (t: TokenResolvable): string | symbol => (t as { token: string | symbol }).token ?? t
+export const resolveToken = (t: TokenResolvable): string | symbol =>
+  (t as { token: string | symbol }).token ?? t;
 
 /** Service */
 export interface Service<T = any> {
@@ -107,15 +108,18 @@ export const createRawTemplate = <T>(
   ) => d,
 ) => f2(f1(createServiceDsl())).build());
 
-export const createTemplate = <T>(f1: (dsl: ServiceDsl<T>) => ServiceDsl<T> = (d) => d) => {
+export const createTemplate = <T>(
+  f1: (dsl: ServiceDsl<T>) => ServiceDsl<T> = (d) => d,
+) => {
   // deno-lint-ignore ban-ts-comment
   // @ts-ignore
-  const raw: ReturnType<typeof createRawTemplate<T>> & { token: Token } = createRawTemplate(f1)
+  const raw: ReturnType<typeof createRawTemplate> & { token: Token } =
+    createRawTemplate(f1);
 
-  raw.token = f1(createServiceDsl()).build().token
+  raw.token = f1(createServiceDsl()).build().token;
 
-  return raw
-}
+  return raw;
+};
 
 /** Creates service */
 export const createService = <T>(
