@@ -1,6 +1,3 @@
-import { createModule } from "../core/mod.ts";
-import { reflectService } from "./reflect-service.ts";
-
-export const reflectModule = createModule((dsl) => dsl.service(reflectService));
-
+export * from "./lazy-service.ts";
+export * from "./reflect-module.ts";
 export * from "./reflect-service.ts";
