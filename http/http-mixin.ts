@@ -5,6 +5,7 @@ import {
   httpOptionsServiceTemplate,
 } from "./http-options-service.ts";
 
+/** Mixin to create HTTP server with default options */
 export const httpMixin = (options: HttpOptionsService) =>
   (dsl: ModuleDsl) =>
     dsl

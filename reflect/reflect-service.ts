@@ -6,14 +6,20 @@ import {
   token,
 } from "../core/mod.ts";
 
+/** Reflect service for module tree reflection */
 export interface ReflectService {
+  /** Gets all modules that satisfy predicate */
   getModules(f?: (m: Module) => boolean): Module[];
+  /** Gets all services that satisfy predicate */
   getServices(f?: (s: Service) => boolean): Service[];
+  /** Gets root module */
   getRoot(): Module;
 }
 
+/** Reflect service injection token */
 export const reflectServiceToken = token("ReflectService");
 
+/** Reflect service */
 export const reflectService = createService<ReflectService>((dsl) =>
   dsl.token(reflectServiceToken).inject(rootModuleToken).provide((
     root: Module,

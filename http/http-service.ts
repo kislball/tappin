@@ -5,10 +5,13 @@ import {
 } from "./http-options-service.ts";
 import { serve } from "../deps.ts";
 
+/** HTTP server service */
 export interface HttpService {
+  /** Starts this server */
   start: () => Promise<void>;
 }
 
+/** HTTP server service */
 export const httpService = createService<HttpService>((dsl) =>
   dsl
     .token(token("HttpService"))
