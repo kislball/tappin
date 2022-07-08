@@ -32,7 +32,7 @@ export const reflectService = createService<ReflectService>((dsl) =>
 
       return result;
     },
-    getServices: (f = () => true) => {
+    getServices: (f = () => true, begin = root) => {
       const result: Service[] = [];
 
       const go = (m: Module) => {
@@ -44,7 +44,7 @@ export const reflectService = createService<ReflectService>((dsl) =>
         }
       };
 
-      go(root);
+      go(begin);
 
       return result;
     },
