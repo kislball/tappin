@@ -1,4 +1,11 @@
-import { AppFactory, Container, ContainerHelper, createContainerHelper, resolveToken, TokenResolvable } from "../core/mod.ts";
+import {
+  AppFactory,
+  Container,
+  ContainerHelper,
+  createContainerHelper,
+  resolveToken,
+  TokenResolvable,
+} from "../core/mod.ts";
 
 /** Utility for testing Tappin apps */
 export interface Tester {
@@ -12,17 +19,17 @@ export interface Tester {
 
 /** Creates tester from factory */
 export const createTester = (factory: AppFactory): Tester => {
-  const container = factory.container
-  
-  const resolve = async <T>(t: TokenResolvable): Promise<T> => {
-    return await container().resolve<T>(resolveToken(t))
-  }
+  const container = factory.container;
 
-  const helper = () => createContainerHelper(container())
+  const resolve = async <T>(t: TokenResolvable): Promise<T> => {
+    return await container().resolve<T>(resolveToken(t));
+  };
+
+  const helper = () => createContainerHelper(container());
 
   return {
     container,
     resolve,
     helper,
-  }
-}
+  };
+};

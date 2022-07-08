@@ -55,9 +55,9 @@ export const createModuleDsl = (module?: Module): ModuleDsl => {
   };
 
   const name = (n: string) => {
-    m.token = Symbol(`Module(${n})`)
+    m.token = Symbol(`Module(${n})`);
     return createModuleDsl(m);
-  }
+  };
 
   return {
     build,
