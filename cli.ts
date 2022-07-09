@@ -74,7 +74,8 @@ const triviaMod = `export * from "./trivia-service.ts";
 export * from "./trivia-module.ts";
 `;
 
-const appModule = `import { createModule, createService, token } from "$tappin/core";
+const appModule =
+  `import { createModule, createService, token } from "$tappin/core";
 import { triviaModule, triviaService } from "$lib/dinosaurs-trivia";
 
 export const appService = createService((dsl) =>
@@ -86,14 +87,14 @@ export const appService = createService((dsl) =>
 export const appModule = createModule((dsl) =>
   dsl.service(appService).import(triviaModule)
 );
-`
+`;
 
 const appMain = `import { createFactory } from "$tappin/core";
 import { appModule } from "./app-module.ts";
 
 const factory = createFactory(appModule);
 await factory.init();
-`
+`;
 
 const denoJson = stringify({
   importMap: "./import_map.json",
