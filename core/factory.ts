@@ -93,7 +93,9 @@ export const createFactory = (root: Module): AppFactory => {
 
   const close = async () => {
     for (const destroy of onDestroyHooks) {
-      await runOnDestroy(destroy).finally();
+      try {
+        await runOnDestroy(destroy)
+      } catch { /* */ }
     }
   };
 

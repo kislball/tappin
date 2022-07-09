@@ -3,11 +3,11 @@ export const onInitToken = Symbol("OnInit");
 
 /** onInit hook interface */
 export interface OnInit {
-  [onInitToken]: () => Promise<void>;
+  [onInitToken]: () => Promise<void> | void;
 }
 
 /** onInit hook mixin */
-export const onInit = (cb: () => Promise<void>): OnInit => ({
+export const onInit = (cb: () => Promise<void> | void): OnInit => ({
   [onInitToken]: cb,
 });
 
@@ -23,11 +23,11 @@ export const onStartToken = Symbol("OnStart");
 
 /** onStart hook interface */
 export interface OnStart {
-  [onStartToken]: () => Promise<void>;
+  [onStartToken]: () => Promise<void> | void;
 }
 
 /** onStart hook mixin */
-export const onStart = (cb: () => Promise<void>): OnStart => ({
+export const onStart = (cb: () => Promise<void> | void): OnStart => ({
   [onStartToken]: cb,
 });
 
@@ -43,11 +43,11 @@ export const onDestroyToken = Symbol("OnDestroy");
 
 /** onDestroy hook interface */
 export interface OnDestroy {
-  [onDestroyToken]: () => Promise<void>;
+  [onDestroyToken]: () => Promise<void> | void;
 }
 
 /** onDestroy hook mixin */
-export const onDestroy = (cb: () => Promise<void>): OnDestroy => ({
+export const onDestroy = (cb: () => Promise<void> | void): OnDestroy => ({
   [onDestroyToken]: cb,
 });
 
