@@ -75,7 +75,7 @@ export * from "./trivia-module.ts";
 `;
 
 const appModule = `import { createModule, token } from "$tappin/core";
-import { triviaModule, triviaService } from "$libs/dinosaurs-trivia";
+import { triviaModule, triviaService } from "$lib/dinosaurs-trivia";
 
 export const appService = createService((dsl) =>
   dsl.token(token("AppService")).inject(triviaService).provide((fact: string) =>
