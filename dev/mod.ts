@@ -10,16 +10,16 @@ export const generateImportMap = (
   { version, modules }: TappinJson,
 ) => {
   if (!modules.includes("dev")) modules.push("dev");
-  const map: { import_map: Record<string, string> } = {
-    import_map: {},
+  const map: { imports: Record<string, string> } = {
+    imports: {},
   };
 
   for (const entry of Object.entries(projects)) {
-    map.import_map[`$lib/${entry[0]}`] = entry[1];
+    map.imports[`$lib/${entry[0]}`] = entry[1];
   }
 
   for (const module of modules) {
-    map.import_map[`$tappin/${module}`] =
+    map.imports[`$tappin/${module}`] =
       `https://deno.land/x/tappin@${version}/${module}/mod.ts`;
   }
 
@@ -44,7 +44,7 @@ export const generate = (base: string) => {
   } catch { /* */ }
 
   const r = generateImportMap(projects, info);
-  Deno.writeTextFileSync(tappinUrl, r);
+  Deno.writeTextFileSync(new URL("import_map.json", base), r);
 };
 
 /** Starts given application */
