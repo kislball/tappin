@@ -79,7 +79,7 @@ import { triviaModule, triviaService } from "$lib/dinosaurs-trivia";
 
 export const appService = createService((dsl) =>
   dsl.token(token("AppService")).inject(triviaService).provide((fact: string) =>
-    fact
+    console.log(fact)
   )
 );
 
