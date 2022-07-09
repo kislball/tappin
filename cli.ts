@@ -74,7 +74,7 @@ const triviaMod = `export * from "./trivia-service.ts";
 export * from "./trivia-module.ts";
 `;
 
-const appModule = `import { createModule, token } from "$tappin/core";
+const appModule = `import { createModule, token, createService } from "$tappin/core";
 import { triviaModule, triviaService } from "$lib/dinosaurs-trivia";
 
 export const appService = createService((dsl) =>
