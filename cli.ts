@@ -93,7 +93,7 @@ const appMain = `import { createFactory } from "$tappin/core";
 import { appModule } from "./app-module.ts";
 
 const factory = createFactory(appModule);
-await factory.init();
+await factory.start();
 `;
 
 const denoJson = stringify({

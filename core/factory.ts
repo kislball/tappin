@@ -4,15 +4,29 @@ import { createModule, Module } from "./module.ts";
 import { Service } from "./service.ts";
 import { containerServiceTemplate } from "./container-service.ts";
 import { rootModuleServiceTemplate } from "./root-module-service.ts";
+import {
+  isOnDestroy,
+  isOnInit,
+  isOnStart,
+  OnDestroy,
+  OnStart,
+  runOnDestroy,
+  runOnInit,
+  runOnStart,
+} from "./hooks.ts";
 
 /** Creates application from root module */
 export interface AppFactory {
-  /** Initializes and starts app */
+  /** Initializes app */
   init: () => Promise<void>;
+  /** Starts app */
+  start: () => Promise<void>;
   /** Returns container */
   container: () => Container;
   /** Returns root module */
   root: () => Module;
+  /** Closes application */
+  close: () => Promise<void>;
 }
 
 /** Creates a new factory */
@@ -29,6 +43,9 @@ export const createFactory = (root: Module): AppFactory => {
     dsl.import(root).service(appContainerService).service(rootModuleService)
   );
 
+  const onDestroyHooks: OnDestroy[] = [];
+  const onStartHooks: OnStart[] = [];
+
   const initModule = async (mod: Module) => {
     for (const service of mod.services) {
       await initService(service);
@@ -38,7 +55,21 @@ export const createFactory = (root: Module): AppFactory => {
       await initModule(impor);
     }
 
-    await appContainer.forceInit(mod.services.map((e) => e.token));
+    const res = await appContainer.forceInit(mod.services.map((e) => e.token));
+
+    for (const r of res) {
+      if (isOnDestroy(r)) {
+        onDestroyHooks.push(r);
+      }
+
+      if (isOnStart(r)) {
+        onStartHooks.push(r);
+      }
+
+      if (isOnInit(r)) {
+        await runOnInit(r);
+      }
+    }
   };
 
   const initService = async <T = any>(service: Service<T>) => {
@@ -53,7 +84,26 @@ export const createFactory = (root: Module): AppFactory => {
     await initModule(factoryModule);
   };
 
-  return { init, container: () => appContainer, root: () => root };
+  const start = async () => {
+    await init();
+    for (const start of onStartHooks) {
+      await runOnStart(start);
+    }
+  };
+
+  const close = async () => {
+    for (const destroy of onDestroyHooks) {
+      await runOnDestroy(destroy).finally();
+    }
+  };
+
+  return {
+    init,
+    container: () => appContainer,
+    root: () => root,
+    close,
+    start,
+  };
 };
 
 /** Creates a factory and starts application */

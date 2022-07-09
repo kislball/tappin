@@ -14,9 +14,11 @@
 
 ### Getting started
 
-First, you will have to install Deno. We highly recommend you use the latest version available.
+First, you will have to install Deno. We highly recommend you use the latest
+version available.
 
-Create a directory for your project. Cd into that directory and initialize the project with the following command:
+Create a directory for your project. Cd into that directory and initialize the
+project with the following command:
 
 ```sh
 $ deno run -r -A https://tappin.deno.dev/ new
@@ -30,7 +32,8 @@ Start project in development mode:
 $ deno task start dinosaurs
 ```
 
-`dinosaurs` is the name of the application to start. Tappin supports multiple applications out of the box.
+`dinosaurs` is the name of the application to start. Tappin supports multiple
+applications out of the box.
 
 note: you can also use TAPPIN_APP environment variable to start application.
 

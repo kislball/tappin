@@ -19,15 +19,16 @@ export const httpService = createService<HttpService>((dsl) =>
     .provide((options: HttpOptionsService) => {
       const app = fast();
 
-      app.use(() => 'hello, world!');
+      app.use(() => "hello, world!");
 
-      const start = () => new Promise<void>(resolve => {
-        app.serve({
-          hostname: options.hostname,
-          port: options.port,
-          onListen: () => resolve(),
-        })
-      })
+      const start = () =>
+        new Promise<void>((resolve) => {
+          app.serve({
+            hostname: options.hostname,
+            port: options.port,
+            onListen: () => resolve(),
+          });
+        });
 
       return {
         start,

@@ -19,7 +19,7 @@ export interface Container {
   /** Resets container */
   reset: () => void;
   /** Forcefully initializes all singletons */
-  forceInit: (which?: Array<string | symbol>) => Promise<void>;
+  forceInit: (which?: Array<string | symbol>) => Promise<any[]>;
 }
 
 /** Creates a default container */
@@ -31,15 +31,18 @@ export const createContainer = (
   const singletons = singles ?? new Map<string | symbol, unknown>();
 
   const forceInit = async (which: Array<string | symbol> = []) => {
+    const res: any[] = [];
     for (
       const provider of [...providers.values()].filter((e) =>
         which.length == 0 || which.includes(e.token)
       )
     ) {
       if (provider.scope === Scope.Singleton) {
-        await getSingleton(provider);
+        res.push(await getSingleton(provider));
       }
     }
+
+    return res;
   };
 
   const resolveProvider = async <T>(provider: Provider<any>): Promise<T> => {

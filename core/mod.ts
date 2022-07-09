@@ -6,5 +6,6 @@ export * from "./container-service.ts";
 export * from "./root-module-service.ts";
 
 export * from "./factory.ts";
+export * from "./hooks.ts";
 export * from "./module.ts";
 export * from "./service.ts";

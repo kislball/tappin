@@ -8,7 +8,7 @@ export interface TappinJson {
 export const generateImportMap = (
   projects: Record<string, string>,
   { version, modules }: TappinJson,
-  map: { imports: Record<string, string> } = { imports: {} }
+  map: { imports: Record<string, string> } = { imports: {} },
 ) => {
   if (!modules.includes("dev")) modules.push("dev");
   for (const entry of Object.entries(projects)) {
@@ -40,10 +40,12 @@ export const generate = (base: string) => {
     }
   } catch { /* */ }
 
-  let existing = { imports: {} }
+  let existing = { imports: {} };
 
   try {
-    existing = JSON.parse(Deno.readTextFileSync(new URL("import_map.json", base)))
+    existing = JSON.parse(
+      Deno.readTextFileSync(new URL("import_map.json", base)),
+    );
   } catch { /* */ }
 
   const r = generateImportMap(projects, info, existing);
