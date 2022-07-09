@@ -1,4 +1,5 @@
 import { latest } from "./www/versions.ts";
+import { generateImportMap } from "./dev/mod.ts";
 
 let dry = false;
 let cmdName = Deno.args?.[0] ?? "help";
@@ -33,6 +34,7 @@ const appName = Deno.args?.[0];
 
 if (appName === undefined) {
   console.error("Please give application name");
+  Deno.exit();
 }
 
 await start(appName, import.meta.url);
@@ -47,15 +49,68 @@ const appName = Deno.args?.[0];
 
 if (appName === undefined) {
   console.error("Please give application name");
+  Deno.exit();
 }
 
 await start(appName, import.meta.url);
 `;
 
+const triviaService = `import { createService, token } from "$tappin/core";
+
+export const triviaService = createService((dsl) =>
+  dsl.token(token("TriviaService")).provide(() => "Denosaurs are really big!")
+);
+`;
+
+const triviaModule = `import { createModule } from "$tappin/core";
+import { triviaService } from "./trivia-service.ts";
+
+export const triviaModule = createModule((dsl) =>
+  dsl.name("TriviaModule").service(triviaService)
+);
+`;
+
+const triviaMod = `export * from "./trivia-service.ts";
+export * from "./trivia-module.ts";
+`;
+
+const appModule = `import { createModule, token } from "$tappin/core";
+import { triviaModule, triviaService } from "$libs/dinosaurs-trivia";
+
+export const appService = createService((dsl) =>
+  dsl.token(token("AppService")).inject(triviaService).provide((fact: string) =>
+    fact
+  )
+);
+
+export const appModule = createModule((dsl) => dsl.import(triviaModule));
+`
+
+const appMain = `import { createFactory } from "$tappin/core";
+import { appModule } from "./app-module.ts";
+
+const factory = createFactory(appModule);
+await factory.init();
+`
+
+const denoJson = stringify({
+  importMap: "./import_map.json",
+  tasks: {
+    pretty: "deno fmt; deno lint",
+    start: "deno run -A --watch --check ./dev.ts",
+  },
+});
+
 const files = {
   "tappin.json": tappinJson,
   "main.ts": mainTs,
   "dev.ts": devTs,
+  "deno.json": denoJson,
+  "libs/dinosaurs-trivia/mod.ts": triviaMod,
+  "libs/dinosaurs-trivia/trivia-service.ts": triviaService,
+  "libs/dinosaurs-trivia/trivia-module.ts": triviaModule,
+  "apps/dinosaurs/app-module.ts": appModule,
+  "apps/dinosaurs/main.ts": appMain,
 };
 
 const dirs = [
@@ -84,3 +139,11 @@ for (const entry of Object.entries(files)) {
     Deno.writeTextFileSync(entry[0], entry[1]);
   }
 }
+
+Deno.writeTextFileSync(
+  "./import_map.json",
+  generateImportMap({ "dinosaurs-trivia": "./libs/dinosaurs-trivia/mod.ts" }, {
+    version: "0.2.0",
+    modules: ["dev", "core"],
+  }),
+);
