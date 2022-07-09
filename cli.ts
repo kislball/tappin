@@ -30,7 +30,7 @@ const tappinJson = stringify({
 
 const mainTs = `import { start } from "$tappin/dev";
 
-const appName = Deno.args?.[0];
+const appName = Deno.args?.[0] ?? Deno.env("TAPPIN_APP");
 
 if (appName === undefined) {
   console.error("Please give application name");
@@ -45,7 +45,7 @@ const devTs = `import { generate, start } from "$tappin/dev";
 generate(import.meta.url);
 console.log("Manifest generated");
 
-const appName = Deno.args?.[0];
+const appName = Deno.args?.[0] ?? Deno.env("TAPPIN_APP");
 
 if (appName === undefined) {
   console.error("Please give application name");

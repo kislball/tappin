@@ -14,12 +14,25 @@
 
 ### Getting started
 
-Tappin comes with a simple CLI. Create a new project in working directory using
-this command:
+First, you will have to install Deno. We highly recommend you use the latest version available.
+
+Create a directory for your project. Cd into that directory and initialize the project with the following command:
 
 ```sh
-$ deno run -r -A https://tappin.deno.dev/
+$ deno run -r -A https://tappin.deno.dev/ new
 ```
+
+Replace new with help to get help on more commands.
+
+Start project in development mode:
+
+```sh
+$ deno task start dinosaurs
+```
+
+`dinosaurs` is the name of the application to start. Tappin supports multiple applications out of the box.
+
+note: you can also use TAPPIN_APP environment variable to start application.
 
 ### Contributing
 
