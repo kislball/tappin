@@ -1,4 +1,4 @@
-import { createService, token } from "../core/mod.ts";
+import { createService, onDestroy, OnDestroy, token } from "../core/mod.ts";
 import {
   HttpOptionsService,
   httpOptionsToken,
@@ -6,7 +6,7 @@ import {
 import fast from "fast";
 
 /** HTTP server service */
-export interface HttpService {
+export interface HttpService extends OnDestroy {
   /** Starts this server */
   start: () => Promise<void>;
 }
@@ -17,6 +17,8 @@ export const httpService = createService<HttpService>((dsl) =>
     .token(token("HttpService"))
     .inject(httpOptionsToken)
     .provide((options: HttpOptionsService) => {
+      const abort = new AbortController();
+
       const app = fast();
 
       app.use(() => "hello, world!");
@@ -27,11 +29,15 @@ export const httpService = createService<HttpService>((dsl) =>
             hostname: options.hostname,
             port: options.port,
             onListen: () => resolve(),
+            signal: abort.signal,
           });
         });
 
       return {
         start,
+        ...onDestroy(() => {
+          abort.abort();
+        }),
       };
     })
 );
