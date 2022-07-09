@@ -3,7 +3,7 @@ import {
   HttpOptionsService,
   httpOptionsToken,
 } from "./http-options-service.ts";
-import { serve } from "../deps.ts";
+import fast from "fast";
 
 /** HTTP server service */
 export interface HttpService {
@@ -17,21 +17,17 @@ export const httpService = createService<HttpService>((dsl) =>
     .token(token("HttpService"))
     .inject(httpOptionsToken)
     .provide((options: HttpOptionsService) => {
-      const start = () => {
-        return new Promise<void>((resolve) => {
-          serve(handler, {
-            port: options.port,
-            hostname: options.hostname,
-            onListen: () => {
-              resolve();
-            },
-          });
-        });
-      };
+      const app = fast();
 
-      const handler = (): Response => {
-        return new Response("Hello, world!");
-      };
+      app.use(() => 'hello, world!');
+
+      const start = () => new Promise<void>(resolve => {
+        app.serve({
+          hostname: options.hostname,
+          port: options.port,
+          onListen: () => resolve(),
+        })
+      })
 
       return {
         start,

@@ -9,7 +9,7 @@ import {
   ReflectService,
   reflectService,
 } from "../../reflect/mod.ts";
-import { assertEquals } from "../deps.ts";
+import { assertEquals } from "assert";
 
 Deno.test("gets all modules", async () => {
   const two = createModule();

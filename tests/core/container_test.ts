@@ -8,7 +8,7 @@ import {
   assertNotEquals,
   assertRejects,
   assertThrows,
-} from "../deps.ts";
+} from "assert";
 
 Deno.test("creates container without any errors", () => {
   createContainer();
