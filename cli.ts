@@ -97,7 +97,7 @@ const denoJson = stringify({
   importMap: "./import_map.json",
   tasks: {
     pretty: "deno fmt; deno lint",
-    start: "deno run -A --watch --check ./dev.ts",
+    start: "deno run -A --watch --config ./deno.json --check ./dev.ts",
   },
 });
 
@@ -143,7 +143,7 @@ for (const entry of Object.entries(files)) {
 Deno.writeTextFileSync(
   "./import_map.json",
   generateImportMap({ "dinosaurs-trivia": "./libs/dinosaurs-trivia/mod.ts" }, {
-    version: "0.2.0",
+    version: latest,
     modules: ["dev", "core"],
   }),
 );
