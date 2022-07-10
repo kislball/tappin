@@ -40,7 +40,7 @@ if (cmdName === "help") {
 
 const stringify = (a: any) => JSON.stringify(a, null, 2);
 
-const loggerTs = `import { setup, handlers } from "log";
+const loggerTs = `import { setup, handlers } from "https://deno.land/std@0.147.0/log/mod.ts";
 
 await setup({
   handlers: {
