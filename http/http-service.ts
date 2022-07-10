@@ -1,4 +1,10 @@
-import { createService, onDestroy, OnDestroy, onStart, token } from "../core/mod.ts";
+import {
+  createService,
+  OnDestroy,
+  onDestroy,
+  onStart,
+  token,
+} from "../core/mod.ts";
 import {
   HttpOptionsService,
   httpOptionsToken,
@@ -31,8 +37,12 @@ export const httpService = createService<HttpService>((dsl) =>
             hostname: options.hostname,
             port: options.port,
             onListen: () => {
-              resolve()
-              logger.info({ message: "Started HTTP server!", port: options.port, hostname: options.hostname });
+              resolve();
+              logger.info({
+                message: "Started HTTP server!",
+                port: options.port,
+                hostname: options.hostname,
+              });
             },
             signal: abort.signal,
           });
@@ -44,7 +54,7 @@ export const httpService = createService<HttpService>((dsl) =>
           abort.abort();
         }),
         ...onStart(async () => {
-          await start()
+          await start();
         }),
       };
     })

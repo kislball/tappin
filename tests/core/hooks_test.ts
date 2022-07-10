@@ -5,7 +5,7 @@ import {
   createService,
   onDestroy,
   onInit,
-onStart,
+  onStart,
 } from "../../core/mod.ts";
 import { assertThrows } from "assert";
 

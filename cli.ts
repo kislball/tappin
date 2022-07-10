@@ -1,6 +1,6 @@
 import { latest } from "./www/versions.ts";
 import { generateImportMap } from "./dev/mod.ts";
-import { setup, handlers, getLogger } from "log";
+import { getLogger, handlers, setup } from "log";
 
 await setup({
   handlers: {
@@ -158,7 +158,9 @@ const dirs = [
 
 const content = Deno.readDirSync(".");
 if ([...content].length !== 0) {
-  logger.critical({ message: "This directory is not empty. Empty it before usage of CLI" });
+  logger.critical({
+    message: "This directory is not empty. Empty it before usage of CLI",
+  });
   Deno.exit();
 }
 
