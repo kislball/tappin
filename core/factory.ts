@@ -1,7 +1,7 @@
 import { Container, createContainer } from "./container/container.ts";
 import { createProvide } from "./container/helper.ts";
 import { createModule, Module } from "./module.ts";
-import { Service } from "./service.ts";
+import { resolveToken, Service, TokenResolvable } from "./service.ts";
 import { containerServiceTemplate } from "./container-service.ts";
 import { rootModuleServiceTemplate } from "./root-module-service.ts";
 import {
@@ -15,6 +15,11 @@ import {
   runOnStart,
 } from "./hooks.ts";
 import { log } from "../deps.ts";
+
+export const stringifyToken = (token: TokenResolvable) => {
+  const resolved = resolveToken(token)
+  return typeof resolved === 'string' ? resolved : resolved.description
+}
 
 /** Creates application from root module */
 export interface AppFactory {
@@ -56,7 +61,7 @@ export const createFactory = (root: Module): AppFactory => {
       await initService(service);
       logger.info({
         message: "Initialized service",
-        service: String(service.token),
+        service: stringifyToken(service),
       });
     }
 
@@ -80,7 +85,7 @@ export const createFactory = (root: Module): AppFactory => {
       }
     }
 
-    logger.info({ message: "Initialized module", module: String(mod.token) });
+    logger.info({ message: "Initialized module", module: stringifyToken(mod) });
   };
 
   const initService = async <T = any>(service: Service<T>) => {
