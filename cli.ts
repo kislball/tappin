@@ -1,6 +1,8 @@
-import { latest } from "./www/versions.ts";
+import { versions } from "./versions.json" assert { type: "json" };
 import { generateImportMap } from "./dev/mod.ts";
 import { getLogger, handlers, setup } from "log";
+
+const latest = versions[0];
 
 await setup({
   handlers: {
