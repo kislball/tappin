@@ -9,8 +9,7 @@ import {
   HttpOptionsService,
   httpOptionsToken,
 } from "./http-options-service.ts";
-import fast from "fast";
-import { getLogger } from "log";
+import { fast, log } from "../deps.ts";
 
 /** HTTP server service */
 export interface HttpService extends OnDestroy {
@@ -24,10 +23,10 @@ export const httpService = createService<HttpService>((dsl) =>
     .token(token("HttpService"))
     .inject(httpOptionsToken)
     .provide((options: HttpOptionsService) => {
-      const logger = getLogger("tappin");
+      const logger = log.getLogger("tappin");
       const abort = new AbortController();
 
-      const app = fast();
+      const app = fast.default();
 
       app.use(() => "hello, world!");
 

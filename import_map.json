@@ -1,8 +1,0 @@
-{
-  "imports": {
-    "fast": "https://deno.land/x/fast@2.1.0/mod.ts",
-    "assert": "https://deno.land/std@0.147.0/testing/asserts.ts",
-    "mock": "https://deno.land/std@0.147.0/testing/mock.ts",
-    "log": "https://deno.land/std@0.147.0/log/mod.ts"
-  }
-}

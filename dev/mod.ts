@@ -1,8 +1,8 @@
-import { getLogger, handlers, setup } from "log";
+import { log } from "../deps.ts";
 
-await setup({
+await log.setup({
   handlers: {
-    "console": new handlers.ConsoleHandler("DEBUG"),
+    "console": new log.handlers.ConsoleHandler("DEBUG"),
   },
   loggers: {
     "tappin-cli": {
@@ -12,25 +12,29 @@ await setup({
   },
 });
 
-const logger = getLogger("tappin-cli");
+const logger = log.getLogger("tappin-cli");
 
 /** Configuration for Tappin import map generaotr */
 export interface TappinJson {
   version: string;
+  modules: string[];
 }
 
 /** Generates import maps */
 export const generateImportMap = (
   projects: Record<string, string>,
-  { version }: TappinJson,
+  { version, modules }: TappinJson,
   map: { imports: Record<string, string> } = { imports: {} },
 ) => {
+  if (!modules.includes("dev")) modules.push("dev");
   for (const entry of Object.entries(projects)) {
     map.imports[`$lib/${entry[0]}`] = entry[1];
   }
 
-  map.imports[`$tappin`] =
-      `https://deno.land/x/tappin@${version}/mod.ts`;
+  for (const module of modules) {
+    map.imports[`$tappin`] =
+      `https://deno.land/x/tappin@${version}/${module}/mod.ts`;
+  }
 
   return JSON.stringify(map, null, 2);
 };

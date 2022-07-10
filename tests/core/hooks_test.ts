@@ -1,4 +1,3 @@
-import { assertSpyCall, spy } from "mock";
 import {
   createFactory,
   createModule,
@@ -7,10 +6,10 @@ import {
   onInit,
   onStart,
 } from "../../core/mod.ts";
-import { assertThrows } from "assert";
+import { assert, mock } from "../deps.ts";
 
 Deno.test("calls onInit hook after initialization", async () => {
-  const onInitSpy = spy(() => new Promise<void>((resolve) => resolve()));
+  const onInitSpy = mock.spy(() => new Promise<void>((resolve) => resolve()));
 
   const onInitTest = createService((dsl) =>
     dsl.provide(() => onInit(onInitSpy))
@@ -21,11 +20,11 @@ Deno.test("calls onInit hook after initialization", async () => {
 
   await factory.init();
 
-  assertSpyCall(onInitSpy, 0);
+  mock.assertSpyCall(onInitSpy, 0);
 });
 
-Deno.test("calls onStart hook after start", async () => {
-  const onStartSpy = spy(() => new Promise<void>((resolve) => resolve()));
+Deno.test({ name: "calls onStart hook after start", sanitizeOps: false, sanitizeResources: false }, async () => {
+  const onStartSpy = mock.spy(() => new Promise<void>((resolve) => resolve()));
 
   const onStartTest = createService((dsl) =>
     dsl.provide(() => onStart(onStartSpy))
@@ -35,12 +34,13 @@ Deno.test("calls onStart hook after start", async () => {
   const factory = createFactory(root);
 
   await factory.start();
+  await factory.close();
 
-  assertSpyCall(onStartSpy, 0);
+  mock.assertSpyCall(onStartSpy, 0);
 });
 
 Deno.test("does not call onStart hook after init", async () => {
-  const onStartSpy = spy(() => new Promise<void>((resolve) => resolve()));
+  const onStartSpy = mock.spy(() => new Promise<void>((resolve) => resolve()));
 
   const onStartTest = createService((dsl) =>
     dsl.provide(() => onStart(onStartSpy))
@@ -50,14 +50,17 @@ Deno.test("does not call onStart hook after init", async () => {
   const factory = createFactory(root);
 
   await factory.init();
+  await factory.close();
 
-  assertThrows(() => {
-    assertSpyCall(onStartSpy, 0);
+  assert.assertThrows(() => {
+    mock.assertSpyCall(onStartSpy, 0);
   });
 });
 
 Deno.test("does not call onDestroy hook after start", async () => {
-  const onDestroySpy = spy(() => new Promise<void>((resolve) => resolve()));
+  const onDestroySpy = mock.spy(() =>
+    new Promise<void>((resolve) => resolve())
+  );
 
   const onDestroyTest = createService((dsl) =>
     dsl.provide(() => onDestroy(onDestroySpy))
@@ -68,13 +71,15 @@ Deno.test("does not call onDestroy hook after start", async () => {
 
   await factory.start();
 
-  assertThrows(() => {
-    assertSpyCall(onDestroySpy, 0);
+  assert.assertThrows(() => {
+    mock.assertSpyCall(onDestroySpy, 0);
   });
 });
 
 Deno.test("does call onDestroy hook after close", async () => {
-  const onDestroySpy = spy(() => new Promise<void>((resolve) => resolve()));
+  const onDestroySpy = mock.spy(() =>
+    new Promise<void>((resolve) => resolve())
+  );
 
   const onDestroyTest = createService((dsl) =>
     dsl.provide(() => onDestroy(onDestroySpy))
@@ -86,5 +91,5 @@ Deno.test("does call onDestroy hook after close", async () => {
   await factory.start();
   await factory.close();
 
-  assertSpyCall(onDestroySpy, 0);
+  mock.assertSpyCall(onDestroySpy, 0);
 });

@@ -14,7 +14,7 @@ import {
   runOnInit,
   runOnStart,
 } from "./hooks.ts";
-import { getLogger } from "log";
+import { log } from "../deps.ts";
 
 /** Creates application from root module */
 export interface AppFactory {
@@ -32,7 +32,7 @@ export interface AppFactory {
 
 /** Creates a new factory */
 export const createFactory = (root: Module): AppFactory => {
-  const logger = getLogger("tappin");
+  const logger = log.getLogger("tappin");
 
   const appContainer = createContainer();
   const appContainerService = containerServiceTemplate((dsl) =>
@@ -97,14 +97,10 @@ export const createFactory = (root: Module): AppFactory => {
   };
 
   const bindHooks = () => {
-    Deno.addSignalListener("SIGINT", async () => {
-      await close();
-    });
+    Deno.addSignalListener("SIGINT", () => close());
 
     try {
-      Deno.addSignalListener("SIGBREAK", async () => {
-        await close();
-      });
+      Deno.addSignalListener("SIGBREAK", () => close());
     } catch {
       /* */
     }
@@ -120,6 +116,13 @@ export const createFactory = (root: Module): AppFactory => {
   };
 
   const close = async () => {
+    Deno.removeSignalListener("SIGINT", close);
+
+    try {
+      Deno.removeSignalListener("SIGBREAK", close);
+    } catch {
+      /* */
+    }
     logger.info({ message: "Application closing..." });
     for (const destroy of onDestroyHooks) {
       try {

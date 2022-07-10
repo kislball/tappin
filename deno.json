@@ -6,6 +6,5 @@
     "rules": {
       "exclude": ["no-explicit-any"]
     }
-  },
-  "importMap": "./import_map.json"
+  }
 }

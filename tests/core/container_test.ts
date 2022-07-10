@@ -3,12 +3,7 @@ import {
   createContainerHelper,
   Scope,
 } from "../../core/mod.ts";
-import {
-  assertEquals,
-  assertNotEquals,
-  assertRejects,
-  assertThrows,
-} from "assert";
+import { assert } from "../deps.ts";
 
 Deno.test("creates container without any errors", () => {
   createContainer();
@@ -21,13 +16,13 @@ Deno.test("creates container, registers a useValue provider and resolves it", as
     useValue: 123,
   });
 
-  assertEquals(await container.resolve("123"), 123);
+  assert.assertEquals(await container.resolve("123"), 123);
 });
 
 Deno.test("creates container, registers a useValue Transient provider and fails", () => {
   const container = createContainer();
 
-  assertThrows(() => {
+  assert.assertThrows(() => {
     container.register({
       token: "123",
       useValue: 132,
@@ -47,7 +42,7 @@ Deno.test("creates container, registers a useFactory and resolves it", async () 
   const one = await container.resolve("123");
   const two = await container.resolve("123");
 
-  assertEquals(one, two);
+  assert.assertEquals(one, two);
 });
 
 Deno.test("creates container, registers a Transient useFactory and resolves it", async () => {
@@ -62,7 +57,7 @@ Deno.test("creates container, registers a Transient useFactory and resolves it",
   const one = await container.resolve("123");
   const two = await container.resolve("123");
 
-  assertNotEquals(one, two);
+  assert.assertNotEquals(one, two);
 });
 
 Deno.test("creates container, registers a useAsyncFactory and resolves it", async () => {
@@ -77,7 +72,7 @@ Deno.test("creates container, registers a useAsyncFactory and resolves it", asyn
   const one = await container.resolve("123");
   const two = await container.resolve("123");
 
-  assertEquals(one, two);
+  assert.assertEquals(one, two);
 });
 
 Deno.test("creates container, registers a Transient useAsyncFactory and resolves it", async () => {
@@ -93,7 +88,7 @@ Deno.test("creates container, registers a Transient useAsyncFactory and resolves
   const one = await container.resolve("123");
   const two = await container.resolve("123");
 
-  assertNotEquals(one, two);
+  assert.assertNotEquals(one, two);
 });
 
 Deno.test("creates container, registers a useFactory provider, resolves it, clears providers, resolves it and fails", async () => {
@@ -109,7 +104,7 @@ Deno.test("creates container, registers a useFactory provider, resolves it, clea
 
   container.clearProviders();
 
-  assertRejects(async () => {
+  assert.assertRejects(async () => {
     await container.resolve("123");
   });
 });
@@ -129,7 +124,7 @@ Deno.test("creates container, registers a useFactory provider, resolves it, clea
 
   const two = await container.resolve("123");
 
-  assertNotEquals(one, two);
+  assert.assertNotEquals(one, two);
 });
 
 Deno.test("creates container, registers a useFactory, resolves it, clears singletons, resolves it and compares", async () => {
@@ -146,7 +141,7 @@ Deno.test("creates container, registers a useFactory, resolves it, clears single
 
   const two = await container.resolve("123");
 
-  assertNotEquals(one, two);
+  assert.assertNotEquals(one, two);
 });
 
 Deno.test("creates container, creates container helper, reigsters a provider and check if everything works", async () => {
@@ -161,5 +156,5 @@ Deno.test("creates container, creates container helper, reigsters a provider and
 
   const v = await helper.provide(["123"], (val: number) => val);
 
-  assertEquals(v, 123);
+  assert.assertEquals(v, 123);
 });

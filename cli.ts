@@ -1,12 +1,12 @@
 import { versions } from "./versions.json" assert { type: "json" };
 import { generateImportMap } from "./mod.ts";
-import { getLogger, handlers, setup } from "log";
+import { log } from "./deps.ts";
 
 const latest = versions[0];
 
-await setup({
+await log.setup({
   handlers: {
-    "console": new handlers.ConsoleHandler("DEBUG"),
+    "console": new log.handlers.ConsoleHandler("DEBUG"),
   },
   loggers: {
     "tappin-cli": {
@@ -16,7 +16,7 @@ await setup({
   },
 });
 
-const logger = getLogger("tappin-cli");
+const logger = log.getLogger("tappin-cli");
 
 let dry = false;
 let cmdName = Deno.args?.[0] ?? "help";
@@ -178,5 +178,6 @@ Deno.writeTextFileSync(
   "./import_map.json",
   generateImportMap({ "dinosaurs-trivia": "./libs/dinosaurs-trivia/mod.ts" }, {
     version: latest,
+    modules: ["core", "dev"],
   }),
 );

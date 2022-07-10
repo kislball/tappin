@@ -9,7 +9,7 @@ import {
   ReflectService,
   reflectService,
 } from "../../reflect/mod.ts";
-import { assertEquals } from "assert";
+import { assert } from "../deps.ts";
 
 Deno.test("gets all modules", async () => {
   const two = createModule();
@@ -26,7 +26,7 @@ Deno.test("gets all modules", async () => {
     return modules.length;
   });
 
-  assertEquals(value, 3);
+  assert.assertEquals(value, 3);
 });
 
 Deno.test("gets all modules with given metadata", async () => {
@@ -44,7 +44,7 @@ Deno.test("gets all modules with given metadata", async () => {
     return modules.length;
   });
 
-  assertEquals(value, 1);
+  assert.assertEquals(value, 1);
 });
 
 Deno.test("gets all services", async () => {
@@ -62,7 +62,7 @@ Deno.test("gets all services", async () => {
     return services.length;
   });
 
-  assertEquals(value, 2);
+  assert.assertEquals(value, 2);
 });
 
 Deno.test("gets all services with given metadata", async () => {
@@ -82,7 +82,7 @@ Deno.test("gets all services with given metadata", async () => {
     return services.length;
   });
 
-  assertEquals(value, 1);
+  assert.assertEquals(value, 1);
 });
 
 Deno.test("gets root module", async () => {
@@ -98,5 +98,5 @@ Deno.test("gets root module", async () => {
     return reflect.getRoot();
   });
 
-  assertEquals(moduleRoot.token, root.token);
+  assert.assertEquals(moduleRoot.token, root.token);
 });
