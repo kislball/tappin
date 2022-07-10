@@ -9,7 +9,7 @@ export interface ModuleDsl {
   /** Compiles this DSL into module */
   build: () => Module;
   /** Sets metadata */
-  set: <T>(key: string, value: T) => ModuleDsl;
+  set: <T>(key: string | symbol, value: T) => ModuleDsl;
   /** Applies given DSL to this DSL */
   apply: (f: (dsl: ModuleDsl) => ModuleDsl) => ModuleDsl;
   /** Changes name of this module */
@@ -45,7 +45,7 @@ export const createModuleDsl = (module?: Module): ModuleDsl => {
     return createModuleDsl(m);
   };
 
-  const set = <T>(key: string, value: T) => {
+  const set = <T>(key: string | symbol, value: T) => {
     m.metadata.set(key, value);
     return createModuleDsl(m);
   };
@@ -73,3 +73,12 @@ export const createModuleDsl = (module?: Module): ModuleDsl => {
 export const createModule = (
   f: (dsl: ModuleDsl) => ModuleDsl = (d) => d,
 ): Module => f(createModuleDsl()).build();
+
+/** Creates module template */
+export const createModuleTemplate = (
+  f1: (dsl: ModuleDsl) => ModuleDsl = (d) => d,
+) => ((
+  f2: (dsl: ModuleDsl) => ModuleDsl = (
+    d,
+  ) => d,
+) => f2(f1(createModuleDsl())).build());

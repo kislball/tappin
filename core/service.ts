@@ -38,9 +38,9 @@ export interface ServiceDsl<T = any> {
   /** Compiles service */
   build: () => Service<T>;
   /** Sets metadata */
-  set: <V>(key: string, value: V) => ServiceDsl<T>;
+  set: <V>(key: string | symbol, value: V) => ServiceDsl<T>;
   /** Applies DSL */
-  apply: (f: (dsl: ServiceDsl<T>) => ServiceDsl<T>) => void;
+  apply: (f: (dsl: ServiceDsl<T>) => ServiceDsl<T>) => ServiceDsl<T>;
 }
 
 /** Creates service dsl */
@@ -77,7 +77,7 @@ export const createServiceDsl = <T = any>(s?: Service<T>): ServiceDsl<T> => {
     return createServiceDsl(service);
   };
 
-  const set = <T>(key: string, value: T) => {
+  const set = <T>(key: string | symbol, value: T) => {
     service.metadata.set(key, value);
     return createServiceDsl(service);
   };
@@ -127,4 +127,4 @@ export const createService = <T>(
 ): Service<T> => f(createServiceDsl()).build();
 
 /** Creates a unique token for service */
-export const token = (name = "no name") => Symbol(`service(${name})`);
+export const token = (name = "no name") => Symbol(`Service(${name})`);

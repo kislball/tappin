@@ -1,7 +1,7 @@
 import { createTemplate, token } from "../core/mod.ts";
 
 /** HTTP options */
-export interface HttpOptionsService {
+export interface HTTPOptionsService {
   /** Hostname */
   hostname?: string;
   /** Port */
@@ -9,10 +9,10 @@ export interface HttpOptionsService {
 }
 
 /** Injection token for http service */
-export const httpOptionsToken = token("HttpOptions");
+export const httpOptionsToken = token("HTTPOptions");
 
 /** HTTP options template */
-export const httpOptionsServiceTemplate = createTemplate<HttpOptionsService>((
+export const httpOptionsServiceTemplate = createTemplate<HTTPOptionsService>((
   dsl,
 ) =>
   dsl

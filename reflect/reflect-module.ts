@@ -4,5 +4,5 @@ import { reflectService } from "./reflect-service.ts";
 
 /** Module for reflection */
 export const reflectModule = createModule((dsl) =>
-  dsl.service(reflectService).service(lazyService)
+  dsl.name("ReflectModule").service(reflectService).service(lazyService)
 );
