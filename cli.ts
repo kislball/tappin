@@ -58,7 +58,7 @@ await setup({
 const mainTs = `import { start } from "$tappin/dev";
 import "./logger.ts";
 
-const appName = Deno.args?.[0] ?? Deno.env("TAPPIN_APP");
+const appName = Deno.args?.[0] ?? Deno.env.get("TAPPIN_APP");
 
 if (appName === undefined) {
   console.error("Please give application name");
@@ -74,7 +74,7 @@ import "./logger.ts";
 generate(import.meta.url);
 console.log("Manifest generated");
 
-const appName = Deno.args?.[0] ?? Deno.env("TAPPIN_APP");
+const appName = Deno.args?.[0] ?? Deno.env.get("TAPPIN_APP");
 
 if (appName === undefined) {
   console.error("Please give application name");
