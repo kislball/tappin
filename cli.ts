@@ -1,5 +1,5 @@
 import { versions } from "./versions.json" assert { type: "json" };
-import { generateImportMap } from "./dev/mod.ts";
+import { generateImportMap } from "./mod.ts";
 import { getLogger, handlers, setup } from "log";
 
 const latest = versions[0];
