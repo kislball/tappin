@@ -23,7 +23,11 @@ Deno.test("calls onInit hook after initialization", async () => {
   mock.assertSpyCall(onInitSpy, 0);
 });
 
-Deno.test({ name: "calls onStart hook after start", sanitizeOps: false, sanitizeResources: false }, async () => {
+Deno.test({
+  name: "calls onStart hook after start",
+  sanitizeOps: false,
+  sanitizeResources: false,
+}, async () => {
   const onStartSpy = mock.spy(() => new Promise<void>((resolve) => resolve()));
 
   const onStartTest = createService((dsl) =>

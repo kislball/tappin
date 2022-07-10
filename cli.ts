@@ -40,7 +40,13 @@ if (cmdName === "help") {
 
 const stringify = (a: any) => JSON.stringify(a, null, 2);
 
-const loggerTs = `import { setup, handlers } from "https://deno.land/std@0.147.0/log/mod.ts";
+const tappinJson = stringify({
+  version: latest,
+  modules: ["dev", "core"],
+});
+
+const loggerTs =
+  `import { setup, handlers } from "https://deno.land/std@0.147.0/log/mod.ts";
 
 await setup({
   handlers: {
@@ -143,6 +149,7 @@ const files = {
   "apps/dinosaurs/app-module.ts": appModule,
   "apps/dinosaurs/main.ts": appMain,
   "logger.ts": loggerTs,
+  "tappin.json": tappinJson,
 };
 
 const dirs = [
