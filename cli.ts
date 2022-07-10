@@ -40,11 +40,6 @@ if (cmdName === "help") {
 
 const stringify = (a: any) => JSON.stringify(a, null, 2);
 
-const tappinJson = stringify({
-  version: latest,
-  modules: ["core", "dev"],
-});
-
 const loggerTs = `import { setup, handlers } from "log";
 
 await setup({
@@ -139,7 +134,6 @@ const denoJson = stringify({
 });
 
 const files = {
-  "tappin.json": tappinJson,
   "main.ts": mainTs,
   "dev.ts": devTs,
   "deno.json": denoJson,
@@ -184,6 +178,5 @@ Deno.writeTextFileSync(
   "./import_map.json",
   generateImportMap({ "dinosaurs-trivia": "./libs/dinosaurs-trivia/mod.ts" }, {
     version: latest,
-    modules: ["dev", "core"],
   }),
 );

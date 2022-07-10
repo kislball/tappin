@@ -17,24 +17,20 @@ const logger = getLogger("tappin-cli");
 /** Configuration for Tappin import map generaotr */
 export interface TappinJson {
   version: string;
-  modules: string[];
 }
 
 /** Generates import maps */
 export const generateImportMap = (
   projects: Record<string, string>,
-  { version, modules }: TappinJson,
+  { version }: TappinJson,
   map: { imports: Record<string, string> } = { imports: {} },
 ) => {
-  if (!modules.includes("dev")) modules.push("dev");
   for (const entry of Object.entries(projects)) {
     map.imports[`$lib/${entry[0]}`] = entry[1];
   }
 
-  for (const module of modules) {
-    map.imports[`$tappin/${module}`] =
-      `https://deno.land/x/tappin@${version}/${module}/mod.ts`;
-  }
+  map.imports[`$tappin`] =
+      `https://deno.land/x/tappin@${version}/mod.ts`;
 
   return JSON.stringify(map, null, 2);
 };
