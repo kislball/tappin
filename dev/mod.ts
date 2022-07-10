@@ -32,7 +32,7 @@ export const generateImportMap = (
   }
 
   for (const module of modules) {
-    map.imports[`$tappin`] =
+    map.imports[`$tappin/${module}`] =
       `https://deno.land/x/tappin@${version}/${module}/mod.ts`;
   }
 
