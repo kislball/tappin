@@ -1,5 +1,20 @@
 import { latest } from "./www/versions.ts";
 import { generateImportMap } from "./dev/mod.ts";
+import { setup, handlers, getLogger } from "log";
+
+await setup({
+  handlers: {
+    "console": new handlers.ConsoleHandler("DEBUG"),
+  },
+  loggers: {
+    "tappin-cli": {
+      handlers: ["console"],
+      level: "DEBUG",
+    },
+  },
+});
+
+const logger = getLogger("tappin-cli");
 
 let dry = false;
 let cmdName = Deno.args?.[0] ?? "help";
@@ -28,7 +43,23 @@ const tappinJson = stringify({
   modules: ["core", "dev"],
 });
 
+const loggerTs = `import { setup, handlers } from "log";
+
+await setup({
+  handlers: {
+    "console": new handlers.ConsoleHandler("DEBUG"),
+  },
+  loggers: {
+    "tappin": {
+      handlers: ["console"],
+      level: "DEBUG",
+    },
+  },
+});
+`;
+
 const mainTs = `import { start } from "$tappin/dev";
+import "./logger.ts";
 
 const appName = Deno.args?.[0] ?? Deno.env("TAPPIN_APP");
 
@@ -41,6 +72,7 @@ await start(appName, import.meta.url);
 `;
 
 const devTs = `import { generate, start } from "$tappin/dev";
+import "./logger.ts";
 
 generate(import.meta.url);
 console.log("Manifest generated");
@@ -114,6 +146,7 @@ const files = {
   "libs/dinosaurs-trivia/trivia-module.ts": triviaModule,
   "apps/dinosaurs/app-module.ts": appModule,
   "apps/dinosaurs/main.ts": appMain,
+  "logger.ts": loggerTs,
 };
 
 const dirs = [
@@ -125,19 +158,19 @@ const dirs = [
 
 const content = Deno.readDirSync(".");
 if ([...content].length !== 0) {
-  console.error("This directory is not empty. Empty it before usage of CLI.");
+  logger.critical({ message: "This directory is not empty. Empty it before usage of CLI" });
   Deno.exit();
 }
 
 for (const dir of dirs) {
-  console.log(`Creating directory ${dir}`);
+  logger.info({ message: "Creating directory", directory: dir });
   if (!dry) {
     Deno.mkdirSync(dir);
   }
 }
 
 for (const entry of Object.entries(files)) {
-  console.log(`Creating file ${entry[0]}`);
+  logger.info({ message: "Creating file", file: entry[0] });
   if (!dry) {
     Deno.writeTextFileSync(entry[0], entry[1]);
   }

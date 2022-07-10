@@ -1,9 +1,10 @@
-import { createService, onDestroy, OnDestroy, token } from "../core/mod.ts";
+import { createService, onDestroy, OnDestroy, onStart, token } from "../core/mod.ts";
 import {
   HttpOptionsService,
   httpOptionsToken,
 } from "./http-options-service.ts";
 import fast from "fast";
+import { getLogger } from "log";
 
 /** HTTP server service */
 export interface HttpService extends OnDestroy {
@@ -17,6 +18,7 @@ export const httpService = createService<HttpService>((dsl) =>
     .token(token("HttpService"))
     .inject(httpOptionsToken)
     .provide((options: HttpOptionsService) => {
+      const logger = getLogger("tappin");
       const abort = new AbortController();
 
       const app = fast();
@@ -28,7 +30,10 @@ export const httpService = createService<HttpService>((dsl) =>
           app.serve({
             hostname: options.hostname,
             port: options.port,
-            onListen: () => resolve(),
+            onListen: () => {
+              resolve()
+              logger.info({ message: "Started HTTP server!", port: options.port, hostname: options.hostname });
+            },
             signal: abort.signal,
           });
         });
@@ -37,6 +42,9 @@ export const httpService = createService<HttpService>((dsl) =>
         start,
         ...onDestroy(() => {
           abort.abort();
+        }),
+        ...onStart(async () => {
+          await start()
         }),
       };
     })

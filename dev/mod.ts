@@ -1,3 +1,19 @@
+import { getLogger, handlers, setup } from "log";
+
+await setup({
+  handlers: {
+    "console": new handlers.ConsoleHandler("DEBUG"),
+  },
+  loggers: {
+    "tappin-cli": {
+      handlers: ["console"],
+      level: "DEBUG",
+    },
+  },
+});
+
+const logger = getLogger("tappin-cli");
+
 /** Configuration for Tappin import map generaotr */
 export interface TappinJson {
   version: string;
@@ -50,9 +66,11 @@ export const generate = (base: string) => {
 
   const r = generateImportMap(projects, info, existing);
   Deno.writeTextFileSync(new URL("import_map.json", base), r);
+  logger.info({ message: "Generated manifest" });
 };
 
 /** Starts given application */
 export const start = async (appName: string, base: string) => {
+  logger.info({ message: "Starting application", appName, base });
   await import(new URL(`apps/${appName}/main.ts`, base).href);
 };

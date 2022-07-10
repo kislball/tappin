@@ -14,6 +14,7 @@ import {
   runOnInit,
   runOnStart,
 } from "./hooks.ts";
+import { getLogger } from "log";
 
 /** Creates application from root module */
 export interface AppFactory {
@@ -31,6 +32,8 @@ export interface AppFactory {
 
 /** Creates a new factory */
 export const createFactory = (root: Module): AppFactory => {
+  const logger = getLogger("tappin");
+
   const appContainer = createContainer();
   const appContainerService = containerServiceTemplate((dsl) =>
     dsl.provide(() => appContainer)
@@ -40,7 +43,7 @@ export const createFactory = (root: Module): AppFactory => {
   );
 
   const factoryModule = createModule((dsl) =>
-    dsl.import(root).service(appContainerService).service(rootModuleService)
+    dsl.name("FactoryModule").import(root).service(appContainerService).service(rootModuleService)
   );
 
   const onDestroyHooks: OnDestroy[] = [];
@@ -49,6 +52,7 @@ export const createFactory = (root: Module): AppFactory => {
   const initModule = async (mod: Module) => {
     for (const service of mod.services) {
       await initService(service);
+      logger.info({ message: "Initialized service", service: String(service.token), });
     }
 
     for (const impor of mod.imports) {
@@ -70,6 +74,8 @@ export const createFactory = (root: Module): AppFactory => {
         await runOnInit(r);
       }
     }
+
+    logger.info({ message: "Initialized module", module: String(mod.token), });
   };
 
   const initService = async <T = any>(service: Service<T>) => {
@@ -82,6 +88,7 @@ export const createFactory = (root: Module): AppFactory => {
 
   const init = async () => {
     await initModule(factoryModule);
+    logger.info({ message: "All modules initialized" });
   };
 
   const start = async () => {
@@ -89,14 +96,19 @@ export const createFactory = (root: Module): AppFactory => {
     for (const start of onStartHooks) {
       await runOnStart(start);
     }
+    logger.info({ message: "Application is ready to go!" });
   };
 
   const close = async () => {
+    logger.info({ message: "Application closing..." });
     for (const destroy of onDestroyHooks) {
       try {
         await runOnDestroy(destroy)
-      } catch { /* */ }
+      } catch (e) {
+        logger.error({ message: "One of the onDestroy hooks failed. Ignoring.", error: e });
+      }
     }
+    logger.info({ message: "Application closed" });
   };
 
   return {
