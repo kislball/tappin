@@ -91,7 +91,22 @@ export const createFactory = (root: Module): AppFactory => {
     logger.info({ message: "All modules initialized" });
   };
 
+  const bindHooks = () => {
+    Deno.addSignalListener("SIGINT", async () => {
+      await close();
+    });
+
+    try {
+      Deno.addSignalListener("SIGBREAK", async () => {
+        await close();
+      });
+    } catch {
+      /* */
+    }
+  }
+
   const start = async () => {
+    bindHooks();
     await init();
     for (const start of onStartHooks) {
       await runOnStart(start);
