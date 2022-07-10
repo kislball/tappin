@@ -1,4 +1,4 @@
-import { versions } from "./versions.json" assert { type: "json" };
+import { versions } from "./versions.ts";
 import { generateImportMap } from "./mod.ts";
 import { log } from "./deps.ts";
 

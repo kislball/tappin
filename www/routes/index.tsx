@@ -4,11 +4,11 @@ import { h } from "preact";
 import { asset } from "$fresh/runtime.ts";
 import { Head } from "https://deno.land/x/fresh@1.0.1/runtime.ts";
 import { Handlers } from "$fresh/server.ts";
-import versions from "../../versions.json" assert { type: "json" };
+import { versions } from "../../versions.ts";
 import GlobalContainer from "../components/GlobalContainer.tsx";
 import { tw } from "../utils/twind.ts";
 
-const latest = versions.versions[0];
+const latest = versions[0];
 
 export const handler: Handlers = {
   GET(req, ctx) {
