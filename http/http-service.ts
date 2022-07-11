@@ -102,7 +102,8 @@ export const httpService = createService<HTTPService>((dsl) =>
             }
           }
 
-          return await options.defaultRoute?.(req) ?? new Response(undefined, { status: 404 });
+          return await options.defaultRoute?.(req) ??
+            new Response(undefined, { status: 404 });
         }, {
           signal: abort.signal,
           hostname: options.hostname,
@@ -110,7 +111,7 @@ export const httpService = createService<HTTPService>((dsl) =>
           onListen: ({ hostname, port }) => {
             logger.info({ message: "Started HTTP server", hostname, port });
           },
-          onError: options.onError
+          onError: options.onError,
         });
       };
 

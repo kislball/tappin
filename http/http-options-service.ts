@@ -7,9 +7,9 @@ export interface HTTPOptionsService {
   /** Port */
   port?: number;
   /** Error handler */
-  onError?: (error: unknown) => Response | Promise<Response>
+  onError?: (error: unknown) => Response | Promise<Response>;
   /** Default route */
-  defaultRoute?: (req: Request) => Response | Promise<Response>
+  defaultRoute?: (req: Request) => Response | Promise<Response>;
 }
 
 /** Injection token for http service */

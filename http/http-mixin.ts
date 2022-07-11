@@ -12,4 +12,6 @@ export const httpStaticOptions = (options: HTTPOptionsService) =>
 export const httpDynamicOptions = (
   options: (dynamic: DynamicService) => HTTPOptionsService,
 ) =>
-  httpOptionsServiceTemplate((dsl) => dsl.inject(dynamicService).provide(options));
+  httpOptionsServiceTemplate((dsl) =>
+    dsl.inject(dynamicService).provide(options)
+  );

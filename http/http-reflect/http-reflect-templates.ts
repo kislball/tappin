@@ -73,4 +73,3 @@ export const globalMiddlewareKey = Symbol("GlobalMiddleware");
 export const createGlobalMiddleware = createTemplate<Middleware>((dsl) =>
   dsl.set(globalMiddlewareKey, true)
 );
-
