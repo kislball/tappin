@@ -7,19 +7,19 @@ import {
   TokenResolvable,
 } from "../core/mod.ts";
 
-/** Token for injection LazyService */
-export const lazyServiceToken = token("LazyService");
+/** Token for injection DynamicService */
+export const dynamicServiceToken = token("DynamicService");
 
-/** Service for lazy loading */
-export interface LazyService {
-  /** Gets a server */
+/** Service for dynamic loading */
+export interface DynamicService {
+  /** Gets a service */
   get: <T>(token: TokenResolvable) => Promise<T>;
 }
 
-/** Lazy service */
-export const lazyService = createService<LazyService>((dsl) =>
+/** Dynamic service */
+export const dynamicService = createService<DynamicService>((dsl) =>
   dsl
-    .token(lazyServiceToken)
+    .token(dynamicServiceToken)
     .inject(containerServiceTemplate)
     .provide((container: Container) => {
       const get = <T>(token: TokenResolvable): Promise<T> =>

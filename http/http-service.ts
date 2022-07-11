@@ -9,11 +9,14 @@ import {
   HTTPOptionsService,
   httpOptionsToken,
 } from "./http-options-service.ts";
-import { fast, log } from "../deps.ts";
+import { log } from "../deps.ts";
 import {
   HTTPReflectService,
   httpReflectService,
 } from "./http-reflect/http-reflect-service.ts";
+import { http } from "../deps.ts";
+import { Context } from "./http-context.ts";
+import { combine } from "./http-middleware.ts";
 
 /** HTTP server service */
 export interface HTTPService extends OnDestroy {
@@ -32,52 +35,92 @@ export const httpService = createService<HTTPService>((dsl) =>
       const logger = log.getLogger("tappin");
       const abort = new AbortController();
 
-      const app = fast.default();
+      const start = async () => {
+        const globalMiddlewares = await reflect.getGlobalMiddlewares();
+        const routes = (await reflect.getRoutes()).map(
+          (e) =>
+            [{
+              method: e[0].method,
+              urlPattern: new URLPattern({
+                pathname: `/${e[0].path}`.replace(/\/{2,}/, "/").replace(
+                  /\/$/,
+                  "",
+                ),
+              }),
+            }, e[1]] as const,
+        );
+        const routeCache = new Map<
+          string,
+          [
+            (ctx: Context) => Promise<Response>,
+            Record<string, string> | undefined,
+          ]
+        >();
+        const urlObjCache = new Map<string, URL>();
 
-      const start = () =>
-        new Promise<void>((resolve) => {
-          app.serve({
-            hostname: options.hostname,
-            port: options.port,
-            onListen: () => {
-              resolve();
-              logger.info({
-                message: "Started HTTP server",
-                port: options.port,
-                hostname: options.hostname,
-              });
-            },
-            signal: abort.signal,
-          });
+        http.serve(async (req) => {
+          const id = req.method + req.url;
+          const context: Partial<Context> = {
+            metadata: {},
+            req,
+            url: urlObjCache.get(id),
+          };
+
+          if (context.url === undefined) {
+            const url = new URL(req.url);
+            urlObjCache.set(id, url);
+            context.url = url;
+          }
+
+          const cached = routeCache.get(id);
+          if (cached !== undefined) {
+            return cached[0](
+              { ...context, params: cached[1] ?? {} } as Context,
+            );
+          }
+
+          for (const route of routes) {
+            const match = route[0].urlPattern.test(req.url);
+
+            if (route[0].method === req.method && match) {
+              const a = combine(...[...globalMiddlewares, ...route[1]]);
+
+              if (route[0].urlPattern.pathname.includes(":")) {
+                const { pathname: { groups } } = route[0].urlPattern.exec(
+                  req.url,
+                )!;
+                routeCache.set(id, [a, groups]);
+                return a(
+                  { ...context, params: groups } as Context,
+                );
+              } else {
+                routeCache.set(id, [a, undefined]);
+                return a(
+                  { ...context, params: {} } as Context,
+                );
+              }
+            }
+          }
+
+          return await options.defaultRoute?.(req) ?? new Response(undefined, { status: 404 });
+        }, {
+          signal: abort.signal,
+          hostname: options.hostname,
+          port: options.port,
+          onListen: ({ hostname, port }) => {
+            logger.info({ message: "Started HTTP server", hostname, port });
+          },
+          onError: options.onError
         });
+      };
 
       return {
         start,
         ...onDestroy(() => {
           abort.abort();
+          logger.info({ message: "HTTP server aborted" });
         }),
         ...onStart(async () => {
-          const routes = await reflect.getRoutes();
-
-          for (const route of routes) {
-            if (route[0].method === "DELETE") {
-              app.delete(route[0].path, ...route[1]);
-            } else if (route[0].method === "POST") {
-              app.post(route[0].path, ...route[1]);
-            } else if (route[0].method === "PUT") {
-              app.put(route[0].path, ...route[1]);
-            } else if (route[0].method === "GET") {
-              app.get(route[0].path, ...route[1]);
-            } else if (route[0].method === "PATCH") {
-              app.patch(route[0].path, ...route[1]);
-            }
-            logger.info({
-              message: "Registered route",
-              path: route[0].path,
-              method: route[0].method,
-            });
-          }
-
           await start();
         }),
       };

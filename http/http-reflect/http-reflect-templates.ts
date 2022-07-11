@@ -1,12 +1,26 @@
-import { createService, ModuleDsl, ServiceDsl, token } from "../../core/mod.ts";
-import { fast } from "../../deps.ts";
+import {
+  createService,
+  createTemplate,
+  ModuleDsl,
+  ServiceDsl,
+  token,
+  TokenResolvable,
+} from "../../core/mod.ts";
+import { Middleware } from "../http-middleware.ts";
 
 /** Token for controller path */
-export const controllerPath = Symbol("ControllerPath");
+export const controllerPathKey = Symbol("ControllerPath");
+
+/** Token for controller middlewares */
+export const controllerMiddlewaresKey = Symbol("Controller middlewares");
 
 /** Applies controller metadata to module */
-export const controller = (path = '') =>
-  (dsl: ModuleDsl) => dsl.set(controllerPath, path).name(`Controller(${path.length > 0 ? path : '/'})`);
+export const controller = (path = "", ...middlewares: TokenResolvable[]) =>
+  (dsl: ModuleDsl) =>
+    dsl.set(controllerPathKey, path).set(controllerMiddlewaresKey, middlewares)
+      .name(
+        `Controller(${path.length > 0 ? path : "/"})`,
+      );
 
 export interface RouteMetadata {
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
@@ -25,17 +39,18 @@ export const routeMetadata = (
     dsl.set<RouteMetadata>(routeMetadataToken, { method, path });
 
 /** Self-explanatory */
-export type RouteHandler = fast.Middleware[];
+export type RouteHandler = Middleware[];
 
 const createRouteFactory = (
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
 ) =>
   (
-    path = '',
+    path = "",
     f: (dsl: ServiceDsl<RouteHandler>) => ServiceDsl<RouteHandler>,
   ) =>
     createService<RouteHandler>((dsl) =>
-      dsl.token(token(`${method}(${path.length > 0 ? `/${path}` : '/'})`)).apply(f).apply(routeMetadata(method, path))
+      dsl.token(token(`${method}(${path.length > 0 ? `/${path}` : "/"})`))
+        .apply(f).apply(routeMetadata(method, path))
     );
 
 /** Creates GET handler */
@@ -48,3 +63,14 @@ export const createDelete = createRouteFactory("DELETE");
 export const createPatch = createRouteFactory("PATCH");
 /** Creates PUT handler */
 export const createPut = createRouteFactory("PUT");
+
+/** Creates a middleware */
+export const createMiddleware = createTemplate<Middleware>();
+
+export const globalMiddlewareKey = Symbol("GlobalMiddleware");
+
+/** Creates a global middleware */
+export const createGlobalMiddleware = createTemplate<Middleware>((dsl) =>
+  dsl.set(globalMiddlewareKey, true)
+);
+

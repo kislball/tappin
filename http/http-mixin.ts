@@ -1,13 +1,15 @@
-import { ModuleDsl } from "../core/mod.ts";
-import { httpModule } from "./http-module.ts";
+import { DynamicService, dynamicService } from "../reflect/dynamic-service.ts";
 import {
   HTTPOptionsService,
   httpOptionsServiceTemplate,
 } from "./http-options-service.ts";
 
-/** Mixin to create HTTP server with default options */
-export const httpMixin = (options: HTTPOptionsService) =>
-  (dsl: ModuleDsl) =>
-    dsl
-      .service(httpOptionsServiceTemplate((dsl) => dsl.provide(() => options)))
-      .import(httpModule);
+/** Creates a service with static http options */
+export const httpStaticOptions = (options: HTTPOptionsService) =>
+  httpOptionsServiceTemplate((dsl) => dsl.provide(() => options));
+
+/** Creates a http options service with dynamic injected */
+export const httpDynamicOptions = (
+  options: (dynamic: DynamicService) => HTTPOptionsService,
+) =>
+  httpOptionsServiceTemplate((dsl) => dsl.inject(dynamicService).provide(options));

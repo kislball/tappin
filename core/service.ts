@@ -114,7 +114,7 @@ export const createTemplate = <T>(
   // deno-lint-ignore ban-ts-comment
   // @ts-ignore
   const raw: ReturnType<typeof createRawTemplate> & { token: Token } =
-    createRawTemplate(f1);
+    createRawTemplate<T>(f1);
 
   raw.token = f1(createServiceDsl()).build().token;
 

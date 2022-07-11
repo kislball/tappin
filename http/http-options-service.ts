@@ -6,6 +6,10 @@ export interface HTTPOptionsService {
   hostname?: string;
   /** Port */
   port?: number;
+  /** Error handler */
+  onError?: (error: unknown) => Response | Promise<Response>
+  /** Default route */
+  defaultRoute?: (req: Request) => Response | Promise<Response>
 }
 
 /** Injection token for http service */

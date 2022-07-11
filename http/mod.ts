@@ -1,3 +1,5 @@
+export * from "./http-context.ts";
+export * from "./http-middleware.ts";
 export * from "./http-mixin.ts";
 export * from "./http-module.ts";
 export * from "./http-options-service.ts";

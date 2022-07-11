@@ -17,9 +17,9 @@ import {
 import { log } from "../deps.ts";
 
 export const stringifyToken = (token: TokenResolvable) => {
-  const resolved = resolveToken(token)
-  return typeof resolved === 'string' ? resolved : resolved.description
-}
+  const resolved = resolveToken(token);
+  return typeof resolved === "string" ? resolved : resolved.description;
+};
 
 /** Creates application from root module */
 export interface AppFactory {
@@ -139,6 +139,7 @@ export const createFactory = (root: Module): AppFactory => {
         });
       }
     }
+    await appContainer.reset();
     logger.info({ message: "Application closed" });
   };
 
