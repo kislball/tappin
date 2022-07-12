@@ -8,7 +8,7 @@ import {
 import {
   defaultErrorHandler,
   HTTPOptionsService,
-  httpOptionsToken,
+  httpOptionsServiceTemplate,
 } from "./http-options-service.ts";
 import { log } from "../deps.ts";
 import {
@@ -31,7 +31,7 @@ export const httpServiceToken = token("HTTPService");
 export const httpService = createService<HTTPService>((dsl) =>
   dsl
     .token(httpServiceToken)
-    .inject(httpOptionsToken, httpReflectService)
+    .inject(httpOptionsServiceTemplate, httpReflectService)
     .provide((options: HTTPOptionsService, reflect: HTTPReflectService) => {
       const logger = log.getLogger("tappin");
       const abort = new AbortController();

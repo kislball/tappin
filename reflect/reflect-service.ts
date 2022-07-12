@@ -1,7 +1,7 @@
 import {
   createService,
   Module,
-  rootModuleToken,
+  rootModuleServiceTemplate,
   Service,
   token,
 } from "../core/mod.ts";
@@ -21,7 +21,7 @@ export const reflectServiceToken = token("ReflectService");
 
 /** Reflect service */
 export const reflectService = createService<ReflectService>((dsl) =>
-  dsl.token(reflectServiceToken).inject(rootModuleToken).provide((
+  dsl.token(reflectServiceToken).inject(rootModuleServiceTemplate).provide((
     root: Module,
   ) => ({
     getRoot: () => root,
