@@ -38,6 +38,10 @@ export default function Home() {
     <>
       <Head>
         <title>Tappin</title>
+        <meta name="description" content={tagLine} />
+        <meta property="og:title" content="Tappin" />
+        <meta property="og:description" content={tagLine} />
+        <meta property="og:image" content={asset('/minilogo.png')} />
       </Head>
       <div
         style="min-height: calc(100vh - 102px);"

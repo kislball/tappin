@@ -1,6 +1,6 @@
 # Tappin
 
-<img src="https://deno.land/x/tappin@0.3.0/media/minilogo.png" align="right" />
+<img src="https://deno.land/x/tappin/media/minilogo.png" align="right" />
 🦖 Powerful application framework for Deno.
 
 ### Features

@@ -52,6 +52,10 @@ export default function DocArticle(
         </style>
         <link rel="stylesheet" href={asset("/unreset.css")} />
         <link rel="stylesheet" href={asset("/prism.css")} />
+        <meta name="description" content={props.data.metadata.description} />
+        <meta property="og:title" content={`${props.data.metadata.title} | Tappin`} />
+        <meta property="og:description" content={props.data.metadata.description} />
+        <meta property="og:image" content={asset('/minilogo.png')} />
       </Head>
       <div class={tw`bg-paper box-border text-[#3e3e3e] mt-10`}>
         <div
