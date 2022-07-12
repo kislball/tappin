@@ -19,9 +19,10 @@ export const createConfigSource = createTemplate<ConfigSource>((dsl) =>
 );
 
 /** Gets config from env source */
-export const envConfigSource = createConfigSource(dsl => 
+export const envConfigSource = createConfigSource((dsl) =>
   dsl
     .provide(() => ({
-      get: <T>(key: string): T | null => Deno.env.get(key) as unknown as T ?? null
+      get: <T>(key: string): T | null =>
+        Deno.env.get(key) as unknown as T ?? null,
     }))
 );

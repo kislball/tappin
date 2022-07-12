@@ -10,7 +10,9 @@ export const httpStaticOptions = (options: HTTPOptionsService) =>
 
 /** Creates a http options service with dynamic injected */
 export const httpDynamicOptions = (
-  options: (dynamic: DynamicService) => HTTPOptionsService | Promise<HTTPOptionsService>,
+  options: (
+    dynamic: DynamicService,
+  ) => HTTPOptionsService | Promise<HTTPOptionsService>,
 ) =>
   httpOptionsServiceTemplate((dsl) =>
     dsl.inject(dynamicService).provide(options)

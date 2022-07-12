@@ -18,7 +18,6 @@ Here is a quick example of Tappin in action:
 import {
   createFactory,
   createModule,
-  createService,
 } from "https://deno.land/x/tappin/core/mod.ts";
 import {
   controller,
@@ -41,7 +40,7 @@ const getRandomFactRoute = createGet("facts", (dsl) =>
           "One of the biggest dinosaurs was the Argentinosaurus.",
         ];
 
-        return facts[Math.random() * (facts.length - 1)];
+        return facts[Math.floor(Math.random() * facts.length)];
       },
     ]));
 
