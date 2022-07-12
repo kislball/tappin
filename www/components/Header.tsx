@@ -14,7 +14,7 @@ export default function Header() {
         <img
           src={asset("/logo.svg")}
           alt="tappin logo - word 'tappin' with a period surrounded by black border"
-          class={tw`relative`}
+          class={tw`relative mx-3`}
           style="transform: translateY(50%);"
         />
       </a>

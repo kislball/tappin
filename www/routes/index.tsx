@@ -45,7 +45,7 @@ export default function Home() {
       </Head>
       <div
         style="min-height: calc(100vh - 102px);"
-        class={tw`flex justify-center items-center`}
+        class={tw`flex justify-center items-center px-3`}
       >
         <div class={tw`flex flex-col justify-center items-center`}>
           <p class={tw`text-[36px] font-medium text-center max-w-[500px]`}>
@@ -53,7 +53,7 @@ export default function Home() {
           </p>
           <div
             class={tw
-              `flex justify-between flex-wrap items-center max-w-[400px] mt-5`}
+              `flex justify-between flex-wrap md:flex-no-wrap items-center max-w-[400px] mt-5`}
           >
             {Object.entries(links).map((link) => (
               <Button href={link[1]}>{link[0]}</Button>
