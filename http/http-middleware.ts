@@ -1,4 +1,5 @@
 import { Context } from "./http-context.ts";
+import { errors } from "../deps.ts";
 
 export const serialize = (a: any) =>
   a instanceof Response ? a : new Response(a);
@@ -21,4 +22,17 @@ export const combine = (...middlewares: Middleware[]) =>
     };
 
     return serialize(await dispatch(0));
+  };
+
+/** Creates a guard middleware from a function returning boolean */
+export const guard = (
+  g: (ctx: Context) => Promise<boolean> | boolean,
+): Middleware =>
+  async (ctx: Context, next: () => any) => {
+    const result = await g(ctx);
+    if (result) {
+      return next();
+    } else {
+      throw new errors.errors.Forbidden();
+    }
   };
