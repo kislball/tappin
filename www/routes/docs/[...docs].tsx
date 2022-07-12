@@ -24,8 +24,8 @@ export const handler: Handlers = {
 
     try {
       markdownData = await Deno.readTextFile(path);
-    } catch(e) {
-      console.error(e)
+    } catch (e) {
+      console.error(e);
       return new Response("", {
         status: 307,
         headers: { Location: "/docs/introduction/welcome" },
@@ -54,15 +54,22 @@ export default function DocArticle(
         <link rel="stylesheet" href={asset("/unreset.css")} />
         <link rel="stylesheet" href={asset("/prism.css")} />
         <meta name="description" content={props.data.metadata.description} />
-        <meta property="og:title" content={`${props.data.metadata.title} | Tappin`} />
-        <meta property="og:description" content={props.data.metadata.description} />
-        <meta property="og:image" content={asset('/minilogo.png')} />
+        <meta
+          property="og:title"
+          content={`${props.data.metadata.title} | Tappin`}
+        />
+        <meta
+          property="og:description"
+          content={props.data.metadata.description}
+        />
+        <meta property="og:image" content={asset("/minilogo.png")} />
       </Head>
       <div class={tw`bg-paper box-border text-[#3e3e3e] mt-10`}>
         <div
           dangerouslySetInnerHTML={{ __html: rendered }}
           class={`unreset ${tw("box-border max-w-[750px] mx-auto px-5 py-8")}`}
-          data-color-mode="light" data-light-theme="light"
+          data-color-mode="light"
+          data-light-theme="light"
         >
         </div>
       </div>

@@ -41,7 +41,7 @@ export default function Home() {
         <meta name="description" content={tagLine} />
         <meta property="og:title" content="Tappin" />
         <meta property="og:description" content={tagLine} />
-        <meta property="og:image" content={asset('/minilogo.png')} />
+        <meta property="og:image" content={asset("/minilogo.png")} />
       </Head>
       <div
         style="min-height: calc(100vh - 102px);"
@@ -51,7 +51,10 @@ export default function Home() {
           <p class={tw`text-[36px] font-medium text-center max-w-[500px]`}>
             {tagLine}
           </p>
-          <div class={tw`flex justify-between flex-wrap items-center max-w-[400px] mt-5`}>
+          <div
+            class={tw
+              `flex justify-between flex-wrap items-center max-w-[400px] mt-5`}
+          >
             {Object.entries(links).map((link) => (
               <Button href={link[1]}>{link[0]}</Button>
             ))}

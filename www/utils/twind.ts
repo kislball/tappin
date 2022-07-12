@@ -11,7 +11,7 @@ export const config: Configuration = {
       lilblack: "rgba(0, 0, 0, 0.20)",
     },
     fontFamily: {
-      serif: ['Inter', 'sans-serif']
+      serif: ["Inter", "sans-serif"],
     },
   },
 };
