@@ -6,6 +6,7 @@ import {
   token,
 } from "../core/mod.ts";
 import {
+  defaultErrorHandler,
   HTTPOptionsService,
   httpOptionsToken,
 } from "./http-options-service.ts";
@@ -111,7 +112,7 @@ export const httpService = createService<HTTPService>((dsl) =>
           onListen: ({ hostname, port }) => {
             logger.info({ message: "Started HTTP server", hostname, port });
           },
-          onError: options.onError,
+          onError: options.onError ?? defaultErrorHandler,
         });
       };
 

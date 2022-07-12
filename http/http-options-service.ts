@@ -1,4 +1,5 @@
 import { createTemplate, token } from "../core/mod.ts";
+import { errors } from "../deps.ts";
 
 /** HTTP options */
 export interface HTTPOptionsService {
@@ -22,3 +23,14 @@ export const httpOptionsServiceTemplate = createTemplate<HTTPOptionsService>((
   dsl
     .token(httpOptionsToken)
 );
+
+/** Default error handler */
+export const defaultErrorHandler: HTTPOptionsService["onError"] = (
+  error: unknown,
+): Response => {
+  if (errors.isHttpError(error)) {
+    return new Response(error.message, { status: error.status });
+  } else {
+    return new Response("Internal server error", { status: 500 });
+  }
+};
