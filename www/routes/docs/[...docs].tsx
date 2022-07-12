@@ -21,6 +21,7 @@ export const handler: Handlers = {
     const path = resolvePath(doc);
 
     let markdownData: string;
+    console.log(path)
 
     try {
       markdownData = await Deno.readTextFile(path);
