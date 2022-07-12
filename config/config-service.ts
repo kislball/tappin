@@ -1,4 +1,4 @@
-import { createService, Service } from "../core/mod.ts";
+import { createService, Service, token } from "../core/mod.ts";
 import {
   DynamicService,
   dynamicService,
@@ -15,10 +15,13 @@ export interface ConfigService {
   require: <T>(key: string) => Promise<T>;
 }
 
+export const configServiceToken = token("ConfigService");
+
 /** ConfigService impl */
 export const configService = createService<ConfigService>((dsl) =>
   dsl
     .inject(reflectService, dynamicService)
+    .token(configServiceToken)
     .provide(async (reflect: ReflectService, dynamic: DynamicService) => {
       const services: Service<ConfigSource>[] = reflect.getServices((s) =>
         s.metadata.get(configSourceMark) === true
