@@ -123,7 +123,7 @@ export const createTemplate = <T>(
 
 /** Creates service */
 export const createService = <T>(
-  f: (dsl: ServiceDsl<T>) => ServiceDsl<T>,
+  f: (dsl: ServiceDsl<T>) => ServiceDsl<T> = (d) => d,
 ): Service<T> => f(createServiceDsl()).build();
 
 /** Creates a unique token for service */
