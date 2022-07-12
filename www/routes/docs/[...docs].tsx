@@ -25,6 +25,7 @@ export const handler: Handlers = {
     try {
       markdownData = await Deno.readTextFile(path);
     } catch(e) {
+      console.error(e)
       return new Response("", {
         status: 307,
         headers: { Location: "/docs/introduction/welcome" },
