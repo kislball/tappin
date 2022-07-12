@@ -1,6 +1,6 @@
-export interface Context {
+export interface Context<T extends Record<string, unknown> = Record<string, unknown>> {
   req: Request;
   url: URL;
-  metadata: Record<string, unknown>;
+  metadata: T;
   params: Record<string, string>;
 }
