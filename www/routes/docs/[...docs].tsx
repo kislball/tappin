@@ -10,7 +10,7 @@ import { parse } from "frontmatter";
 import { tw } from "../../utils/twind.ts";
 
 export const handler: Handlers = {
-  GET: (req, ctx) => {
+  GET: async (req, ctx) => {
     const doc = ctx.params.docs;
     if (doc.length === 0 || doc === "introduction") {
       return new Response("", {
@@ -23,9 +23,8 @@ export const handler: Handlers = {
     let markdownData: string;
 
     try {
-      markdownData = Deno.readTextFileSync(path);
+      markdownData = await Deno.readTextFile(path);
     } catch(e) {
-      console.error(e)
       return new Response("", {
         status: 307,
         headers: { Location: "/docs/introduction/welcome" },
