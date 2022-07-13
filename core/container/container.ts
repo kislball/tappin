@@ -18,8 +18,8 @@ export interface Container {
   clearProviders: () => void;
   /** Resets container */
   reset: () => void;
-  /** Forcefully initializes all singletons */
-  forceInit: (which?: Array<string | symbol>) => Promise<any[]>;
+  /** Initializes given singletons */
+  initialize: (which?: Array<string | symbol>) => Promise<any[]>;
 }
 
 /** Creates a default container */
@@ -30,14 +30,16 @@ export const createContainer = (
   const providers = provs ?? new Map<string | symbol, Provider<unknown>>();
   const singletons = singles ?? new Map<string | symbol, unknown>();
 
-  const forceInit = async (which: Array<string | symbol> = []) => {
+  const initialized: Array<string | symbol> = [];
+
+  const initialize = async (which: Array<string | symbol> = []) => {
     const res: any[] = [];
     for (
       const provider of [...providers.values()].filter((e) =>
         which.length == 0 || which.includes(e.token)
       )
     ) {
-      if (provider.scope === Scope.Singleton) {
+      if (provider.scope === Scope.Singleton && !initialized.includes(provider.token)) {
         res.push(await getSingleton(provider));
       }
     }
@@ -46,6 +48,7 @@ export const createContainer = (
   };
 
   const resolveProvider = async <T>(provider: Provider<any>): Promise<T> => {
+    initialized.push(provider.token);
     if (isValueProvider(provider)) {
       return provider.useValue as T;
     } else if (isFactoryProvider(provider)) {
@@ -76,6 +79,12 @@ export const createContainer = (
     if (scope !== Scope.Singleton && isValueProvider(provider)) {
       throw new Error(
         `ValueProvider is only compatible with scope Scope.Singleton`,
+      );
+    }
+
+    if (providers.has(provider.token)) {
+      throw new Error(
+        `Provider already registered - ${String(provider.token)}`,
       );
     }
 
@@ -125,6 +134,6 @@ export const createContainer = (
     clearSingletons,
     register,
     resolve,
-    forceInit,
+    initialize,
   };
 };

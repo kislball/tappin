@@ -69,7 +69,7 @@ export const createFactory = (root: Module): AppFactory => {
       await initModule(impor);
     }
 
-    const res = await appContainer.forceInit(mod.services.map((e) => e.token));
+    const res = await appContainer.initialize(mod.services.map((e) => e.token));
 
     for (const r of res) {
       if (isOnDestroy(r)) {

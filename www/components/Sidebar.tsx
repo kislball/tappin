@@ -13,7 +13,9 @@ export default function Sidebar() {
             <ol class={tw`font-normal`}>
               {Object.entries(section[1]).map((e) => (
                 <li>
-                  <a href={`/docs${e[1].slice(1).replace('.md', '')}`}>{e[0]}</a>
+                  <a href={`/docs${e[1].slice(1).replace(".md", "")}`}>
+                    {e[0]}
+                  </a>
                 </li>
               ))}
             </ol>

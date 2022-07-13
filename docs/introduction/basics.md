@@ -32,10 +32,11 @@ A classic Tappin module looks something like this:
 
 ```ts
 const appModule = createModule((dsl) =>
+  // appModule in camel case
   dsl
-    .name("AppModule")
-    .import(otherModule)
-    .service(someService)
+    .name("AppModule") // name of module for easier debugging, PascalCase
+    .import(otherModule) // import of otherModule
+    .service(someService) // adds someService to container
 );
 ```
 
@@ -65,9 +66,10 @@ interface RandomService {
   getRandom: () => number;
 }
 
-const randomServiceToken = token("RandomService");
+const randomServiceToken = token("RandomService"); // also a good practice is too export the token
 
 const randomService = createService<RandomService>((dsl) =>
+  // a really good practice is to provide an interface for the service
   dsl
     .token(randomServiceToken)
     .inject(mathService)
@@ -78,6 +80,53 @@ const randomService = createService<RandomService>((dsl) =>
       };
     })
 );
+```
+
+### Templates
+
+You can use `createTemplate` function to create a template for a service.
+
+Template returns a service factory(similar to createService) with some
+additional metadata.
+
+There are two most common usecases:
+
+- In a serivce in a library, which implementation is provided by user of library
+- When you have to create a group of services and provide some common metadata
+
+First use case:
+
+```ts
+const serviceOptionsToken = token("serviceOptions");
+
+const createOptions = createTemplate<ServiceOptions>(); // this function creates a template, which will only accept ServiceOptions implementations
+
+// now you can inject optionsTemplate or optionsTemplate.token.
+
+// this way you create an implementation for a service
+
+const myOptions = createOptions((dsl) =>
+  dsl.provide(() => ({/* some options */}))
+);
+
+// note: you only register myOptions
+```
+
+Second usecase uses [reflection](/docs/modules/reflect.md). Now, you will only
+get to know how to apply metadata to a service
+
+```ts
+const createCrawler = createService<Crawler>((dsl) =>
+  dsl
+    .token(Symbol()) // otherwise, all crawlers would use the same token
+    .set("isCrawler", true) // not recommended, you should use symbol instead
+);
+
+const googleCrawler = createCrawler(/* ... */);
+const yandexCrawler = createCrawler(/* ... */);
+const bingCrawler = createCrawler(/* ... */);
+
+// now all three have isCrawler set to true
 ```
 
 ## Token
