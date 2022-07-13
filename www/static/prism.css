@@ -259,12 +259,41 @@ a:hover {
 }
 
 ol {
-  counter-reset: item
+  counter-reset: item;
 }
-li {
-  display: block
+
+ol > li {
+  counter-increment: item;
 }
-li:before {
+
+ol ol > li {
+  display: block;
+}
+
+ol ol > li:before {
   content: counters(item, ".") ". ";
-  counter-increment: item
+  margin-left: -20px;
+}
+
+
+table {
+  border-collapse: collapse !important;
+}
+
+table td, table th {
+  border: 1px solid #000000;
+  padding: 16px !important;
+}
+
+table tr:nth-child(even){
+  background-color: rgba(0,0,0,0.07);
+}
+
+table tr:hover {background-color: rgba(0,0,0,0.05);}
+
+table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #fff;
 }
