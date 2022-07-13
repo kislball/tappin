@@ -6,3 +6,4 @@ export * from "./http-options-service.ts";
 export * from "./http-service.ts";
 
 export * from "./http-reflect/mod.ts";
+export * from "./middlewares/mod.ts";

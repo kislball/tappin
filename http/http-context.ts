@@ -1,5 +1,5 @@
 export interface Context<
-  T extends Record<string, unknown> = Record<string, unknown>,
+  T = Record<string, unknown>,
 > {
   req: Request;
   url: URL;

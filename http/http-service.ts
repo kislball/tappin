@@ -38,15 +38,19 @@ export const httpService = createService<HTTPService>((dsl) =>
 
       const start = async () => {
         const globalMiddlewares = await reflect.getGlobalMiddlewares();
+        const getPathname = (path: string) =>
+          `/${path}`.replace(/\/{2,}/, "/").replace(
+            /\/$/,
+            "",
+          );
         const routes = (await reflect.getRoutes()).map(
           (e) =>
             [{
               method: e[0].method,
               urlPattern: new URLPattern({
-                pathname: `/${e[0].path}`.replace(/\/{2,}/, "/").replace(
-                  /\/$/,
-                  "",
-                ),
+                pathname: getPathname(e[0].path).length === 0
+                  ? "/"
+                  : getPathname(e[0].path),
               }),
             }, e[1]] as const,
         );

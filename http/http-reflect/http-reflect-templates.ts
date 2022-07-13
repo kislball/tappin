@@ -2,6 +2,7 @@ import {
   createService,
   createTemplate,
   ModuleDsl,
+  Service,
   ServiceDsl,
   token,
   TokenResolvable,
@@ -73,3 +74,9 @@ export const globalMiddlewareKey = Symbol("GlobalMiddleware");
 export const createGlobalMiddleware = createTemplate<Middleware>((dsl) =>
   dsl.set(globalMiddlewareKey, true)
 );
+
+/** Marks an existing middleware as global */
+export const globalify = (s: Service<Middleware>): Service<Middleware> => ({
+  ...s,
+  metadata: new Map(s.metadata).set(globalMiddlewareKey, true),
+});
