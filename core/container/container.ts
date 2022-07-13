@@ -39,7 +39,10 @@ export const createContainer = (
         which.length == 0 || which.includes(e.token)
       )
     ) {
-      if (provider.scope === Scope.Singleton && !initialized.includes(provider.token)) {
+      if (
+        provider.scope === Scope.Singleton &&
+        !initialized.includes(provider.token)
+      ) {
         res.push(await getSingleton(provider));
       }
     }

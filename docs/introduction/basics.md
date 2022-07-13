@@ -99,7 +99,9 @@ First use case:
 ```ts
 const serviceOptionsToken = token("serviceOptions");
 
-const createOptions = createTemplate<ServiceOptions>(); // this function creates a template, which will only accept ServiceOptions implementations
+const optionsTemplate = createTemplate<ServiceOptions>((dsl) =>
+  dsl.token(serviceOptionsToken) // do NOT put token() here. it will create a new, unique symbol every time this function is called
+); // this function creates a template, which will only accept ServiceOptions implementations
 
 // now you can inject optionsTemplate or optionsTemplate.token.
 
@@ -112,13 +114,14 @@ const myOptions = createOptions((dsl) =>
 // note: you only register myOptions
 ```
 
-Second usecase uses [reflection](/docs/modules/reflect.md). Now, you will only
-get to know how to apply metadata to a service
+Second usecase uses [reflection](/docs/modules/reflect). Now, you will only get
+to know how to apply metadata to a service
 
 ```ts
-const createCrawler = createService<Crawler>((dsl) =>
+// since this template is more like a mixin and a factory,
+// i recommend using createX pattern here
+const createCrawler = createTemplate<Crawler>((dsl) =>
   dsl
-    .token(Symbol()) // otherwise, all crawlers would use the same token
     .set("isCrawler", true) // not recommended, you should use symbol instead
 );
 
