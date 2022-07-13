@@ -3,6 +3,7 @@ export * from "./container/helper.ts";
 export * from "./container/provider.ts";
 
 export * from "./container-service.ts";
+export * from "./factory-service.ts";
 export * from "./root-module-service.ts";
 
 export * from "./factory.ts";

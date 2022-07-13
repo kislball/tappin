@@ -15,6 +15,7 @@ import {
   runOnStart,
 } from "./hooks.ts";
 import { log } from "../deps.ts";
+import { factoryServiceTemplate } from "./factory-service.ts";
 
 export const stringifyToken = (token: TokenResolvable) => {
   const resolved = resolveToken(token);
@@ -33,6 +34,8 @@ export interface AppFactory {
   root: () => Module;
   /** Closes application */
   close: () => Promise<void>;
+  /** Initialized a module */
+  initModule: (m: Module) => Promise<void>;
 }
 
 /** Creates a new factory */
@@ -46,17 +49,29 @@ export const createFactory = (root: Module): AppFactory => {
   const rootModuleService = rootModuleServiceTemplate((dsl) =>
     dsl.provide(() => root)
   );
+  const factoryService = factoryServiceTemplate((dsl) =>
+    dsl.provide(() => factory)
+  );
 
   const factoryModule = createModule((dsl) =>
-    dsl.name("FactoryModule").import(root).service(appContainerService).service(
-      rootModuleService,
-    )
+    dsl
+      .name("FactoryModule")
+      .import(root)
+      .service(appContainerService)
+      .service(
+        rootModuleService,
+      )
+      .service(factoryService)
   );
 
   const onDestroyHooks: OnDestroy[] = [];
   const onStartHooks: OnStart[] = [];
 
+  const initializedModules: symbol[] = [];
+
   const initModule = async (mod: Module) => {
+    if (initializedModules.includes(mod.token)) return;
+    initializedModules.push(mod.token);
     for (const service of mod.services) {
       await initService(service);
       logger.info({
@@ -143,13 +158,16 @@ export const createFactory = (root: Module): AppFactory => {
     logger.info({ message: "Application closed" });
   };
 
-  return {
+  const factory = {
     init,
     container: () => appContainer,
     root: () => root,
     close,
     start,
+    initModule,
   };
+
+  return factory;
 };
 
 /** Creates a factory and starts application */

@@ -53,11 +53,11 @@ connect to each other and form interesting structures.
 
 Tappin service also has a lifecycle. It consists of three stages:
 
-| Name    | Description                                                          |
-| ------- | -------------------------------------------------------------------- |
-| init    | Runs after all services in the same module have been initialized     |
-| start   | Runs after application has started. Usually, HTTP server starts here |
-| destroy | Called after application is closing/factory.close() has been called  |
+| Name        | Description                                                          |
+| ----------- | -------------------------------------------------------------------- |
+| `onInit`    | Runs after all services in the same module have been initialized     |
+| `onStart`   | Runs after application has started. Usually, HTTP server starts here |
+| `onDestroy` | Called after application is closing/factory.close() has been called  |
 
 A class Tappin service looks something like this:
 
@@ -72,7 +72,7 @@ const randomService = createService<RandomService>((dsl) =>
   // a really good practice is to provide an interface for the service
   dsl
     .token(randomServiceToken)
-    .inject(mathService)
+    .inject(mathService) // inject a mathService. You can pass here a token or a service itself
     .provide((mathService: { floor: (n: number) => number }) => {
       return {
         ...onInit(() => generateSeed()),
@@ -141,3 +141,14 @@ Tappin provides a built-in function for token generation:
 ```ts
 const myToken = token("My unique token");
 ```
+
+## Packages
+
+Tappin does not have a single `mod.ts` file. Instead, you will import mod files
+of those packages you need to use. A package is a directory in root of Tappin
+repository.
+
+## What's next?
+
+All of that knowledge is pretty useless without the core aspect of Tappin -
+`createFactory`. Learn more about it in the next section.

@@ -1,4 +1,4 @@
-import { createTemplate, ServiceDsl } from "../core/mod.ts";
+import { createTemplate, ServiceDsl, token } from "../core/mod.ts";
 
 /** Simple configuration source */
 export interface ConfigSource {
@@ -15,12 +15,15 @@ export const configSource = () =>
 
 /** Creates a configuration source */
 export const createConfigSource = createTemplate<ConfigSource>((dsl) =>
-  dsl.apply(configSource())
+  dsl.token(token("UnknownConfigSource")).apply(configSource())
 );
+
+export const envConfigSourceToken = token("EnvConfigSource");
 
 /** Gets config from env source */
 export const envConfigSource = createConfigSource((dsl) =>
   dsl
+    .token(envConfigSourceToken)
     .provide(() => ({
       get: <T>(key: string): T | null =>
         Deno.env.get(key) as unknown as T ?? null,
