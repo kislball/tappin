@@ -14,7 +14,9 @@ In previous chapter, you've been introducted to several concepts:
 In this chapter, we will go through all of these concepts in more detail.
 
 ## Note
-All packages in this article are imported from `core` package(https://deno.land/x/tappin/core/mod.ts).
+
+All packages in this article are imported from `core`
+package(https://deno.land/x/tappin/core/mod.ts).
 
 ## Module
 
@@ -79,6 +81,7 @@ const randomService = createService<RandomService>((dsl) =>
 ```
 
 ## Token
+
 Token can be an any string or a symbol. The latter is prefered.
 
 Tappin provides a built-in function for token generation:

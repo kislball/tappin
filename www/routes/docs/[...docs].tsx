@@ -8,6 +8,7 @@ import "https://esm.sh/prismjs@1.27.0/components/prism-bash?no-check";
 import { asset, Head } from "$fresh/runtime.ts";
 import { parse } from "frontmatter";
 import { tw } from "../../utils/twind.ts";
+import Sidebar from "../../components/Sidebar.tsx";
 
 export const handler: Handlers = {
   GET: async (req, ctx) => {
@@ -25,7 +26,6 @@ export const handler: Handlers = {
     try {
       markdownData = await Deno.readTextFile(path);
     } catch (e) {
-      console.error(e);
       return new Response("", {
         status: 307,
         headers: { Location: "/docs/introduction/welcome" },
@@ -33,7 +33,8 @@ export const handler: Handlers = {
     }
 
     const parsed = parse(markdownData);
-    return ctx.render({ markdownData: parsed.content, metadata: parsed.data });
+    const rendered = render(parsed.content, { baseUrl: import.meta.url });
+    return ctx.render({ markdownData: rendered, metadata: parsed.data });
   },
 };
 
@@ -42,8 +43,6 @@ export default function DocArticle(
     { markdownData: string; metadata: { title: string; description: string } }
   >,
 ) {
-  const rendered = render(props.data.markdownData);
-
   return (
     <Fragment>
       <Head>
@@ -64,10 +63,14 @@ export default function DocArticle(
         />
         <meta property="og:image" content={asset("/minilogo.png")} />
       </Head>
-      <div class={tw`bg-paper box-border text-[#3e3e3e] mt-10`}>
+      <div
+        class={tw
+          `bg-paper box-border text-[#3e3e3e] mt-10 grid grid-cols-1 lg:grid-cols-4 max-w-[1100px] mx-auto px-5 py-8`}
+      >
+        <Sidebar />
         <div
-          dangerouslySetInnerHTML={{ __html: rendered }}
-          class={`unreset ${tw("box-border max-w-[750px] mx-auto px-5 py-8")}`}
+          dangerouslySetInnerHTML={{ __html: props.data.markdownData }}
+          class={`unreset ${tw("box-border col-span-3")}`}
           data-color-mode="light"
           data-light-theme="light"
         >

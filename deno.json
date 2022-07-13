@@ -1,6 +1,7 @@
 {
   "tasks": {
-    "pretty": "deno fmt; deno lint"
+    "pretty": "deno fmt; deno lint",
+    "start-web": "deno run -A --watch=www/static/,www/routes/ www/dev.ts"
   },
   "lint": {
     "rules": {

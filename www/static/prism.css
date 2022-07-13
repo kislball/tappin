@@ -248,3 +248,23 @@ pre, code {
   white-space: pre !important;
   overflow: auto;
 }
+
+a {
+  color: #7777ff;
+  transition: .2s;
+}
+
+a:hover {
+  opacity: 0.7;
+}
+
+ol {
+  counter-reset: item
+}
+li {
+  display: block
+}
+li:before {
+  content: counters(item, ".") ". ";
+  counter-increment: item
+}

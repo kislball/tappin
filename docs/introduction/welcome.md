@@ -78,9 +78,9 @@ frameworks like ASP.NET, NestJS, Spring had shown that it solves a lot of
 problems. Tappin follows "the DI" way but a bit differently.
 
 In its core, Tappin is an advanced dependency container. It intializes a
-*module*. Module is a set of **services* which are identified by *tokens*.
-A module can *import* other modules. Services can *inject* other services
-and access what they *provide* using tokens. Behind a token, there can be any
+_module_. Module is a set of _services_ which are identified by _tokens_. A
+module can _import_ other modules. Services can _inject_ other services and
+access what they _provide_ using tokens. Behind a token, there can be any
 implementation. This implements dependency inversion principle.
 
 In short, your application turns into a Lego set.
