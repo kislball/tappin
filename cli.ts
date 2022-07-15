@@ -42,7 +42,7 @@ const stringify = (a: any) => JSON.stringify(a, null, 2);
 
 const tappinJson = stringify({
   version: latest,
-  modules: ["dev", "core"],
+  packages: ["dev", "core"],
 });
 
 const loggerTs =

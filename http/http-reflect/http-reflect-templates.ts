@@ -24,7 +24,15 @@ export const controller = (path = "", ...middlewares: TokenResolvable[]) =>
       );
 
 export interface RouteMetadata {
-  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  method:
+    | "GET"
+    | "POST"
+    | "PUT"
+    | "PATCH"
+    | "DELETE"
+    | "OPTIONS"
+    | "HEAD"
+    | "ALL";
   path: string;
 }
 
@@ -33,7 +41,15 @@ export const routeMetadataToken = Symbol("routeMetadataToken");
 
 /** Applies routeMetadata to service */
 export const routeMetadata = (
-  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
+  method:
+    | "GET"
+    | "POST"
+    | "PUT"
+    | "PATCH"
+    | "DELETE"
+    | "OPTIONS"
+    | "HEAD"
+    | "ALL",
   path: string,
 ) =>
   (dsl: ServiceDsl<RouteHandler>) =>
@@ -43,7 +59,15 @@ export const routeMetadata = (
 export type RouteHandler = Middleware[];
 
 const createRouteFactory = (
-  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
+  method:
+    | "GET"
+    | "POST"
+    | "PUT"
+    | "PATCH"
+    | "DELETE"
+    | "OPTIONS"
+    | "HEAD"
+    | "ALL",
 ) =>
   (
     path = "",
@@ -64,6 +88,12 @@ export const createDelete = createRouteFactory("DELETE");
 export const createPatch = createRouteFactory("PATCH");
 /** Creates PUT handler */
 export const createPut = createRouteFactory("PUT");
+/** Creates PUT handler */
+export const createHead = createRouteFactory("HEAD");
+/** Creates PUT handler */
+export const createOptions = createRouteFactory("OPTIONS");
+/** Creates PUT handler */
+export const createAll = createRouteFactory("ALL");
 
 /** Creates a middleware */
 export const createMiddleware = createTemplate<Middleware>();

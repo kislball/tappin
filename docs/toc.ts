@@ -5,4 +5,8 @@ export const contents: Record<string, Record<string, string>> = {
     "Factory": "./introduction/factory.md",
     "Philosophy": "./introduction/philosophy.md",
   },
+  "HTTP": {
+    "Overview": "./http/http.md",
+    "Server": "./http/server.md",
+  },
 };

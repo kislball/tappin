@@ -87,7 +87,10 @@ export const httpService = createService<HTTPService>((dsl) =>
           for (const route of routes) {
             const match = route[0].urlPattern.test(req.url);
 
-            if (route[0].method === req.method && match) {
+            if (
+              (route[0].method === req.method || route[0].method === "ALL") &&
+              match
+            ) {
               const a = combine(...[...globalMiddlewares, ...route[1]]);
 
               if (route[0].urlPattern.pathname.includes(":")) {

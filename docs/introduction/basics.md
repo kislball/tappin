@@ -114,7 +114,7 @@ const myOptions = createOptions((dsl) =>
 // note: you only register myOptions
 ```
 
-Second usecase uses [reflection](/docs/modules/reflect). Now, you will only get
+Second usecase uses [reflection](/docs/reflect/overview). Now, you will only get
 to know how to apply metadata to a service
 
 ```ts
