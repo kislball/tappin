@@ -37,6 +37,8 @@ applications out of the box.
 
 note: you can also use TAPPIN_APP environment variable to start application.
 
+See [documentation](https://tappin.deno.dev/docs) for details.
+
 ### Contributing
 
 Checkout [CONTRIBUTING.md](./CONTRIBUTING.md) file for details.
