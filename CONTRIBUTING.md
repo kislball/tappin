@@ -1,6 +1,6 @@
 # Tappin contribution guidelines
 
-- Write commits without any conventions. Just make sure it is in Present Simple
+- Write commits using conventional commits
 - Test everything
 - Write tests
 - Have fun
