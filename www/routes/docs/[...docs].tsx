@@ -68,12 +68,14 @@ export default function DocArticle(
           `bg-paper box-border text-[#3e3e3e] mt-10 grid grid-cols-1 lg:grid-cols-4 max-w-[1100px] mx-auto px-5 py-8`}
       >
         <Sidebar />
-        <div
-          dangerouslySetInnerHTML={{ __html: props.data.markdownData }}
-          class={`unreset ${tw("box-border col-span-3")}`}
-          data-color-mode="light"
-          data-light-theme="light"
-        >
+        <div class={`unreset ${tw("box-border col-span-3")}`}>
+          <h1>{props.data.metadata.title}</h1>
+          <div
+            dangerouslySetInnerHTML={{ __html: props.data.markdownData }}
+            data-color-mode="light"
+            data-light-theme="light"
+          >
+          </div>
         </div>
       </div>
     </Fragment>
