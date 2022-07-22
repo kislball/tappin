@@ -5,7 +5,7 @@ export const serialize = (a: any) =>
   a instanceof Response ? a : new Response(a);
 
 /** Represents a middleware */
-export type Middleware = (ctx: Context, next: () => any) => any;
+export type Middleware<T = any, R = any> = (ctx: Context<T>, next: () => any) => Promise<R> | R;
 
 /**
  * Combines middlewares into a single function and returns a function
