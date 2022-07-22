@@ -12,5 +12,6 @@ export const contents: Record<string, Record<string, string>> = {
   "HTTP": {
     "Overview": "./http/http.md",
     "Server": "./http/server.md",
+    "Middlewares": "./http/middlewares.md",
   },
 };
