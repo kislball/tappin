@@ -12,8 +12,8 @@ It uses `crypto.randomUUID()` for getting request ID.
 ### Example
 
 ```ts
-export const someController = createModule(dsl => 
+export const someController = createModule((dsl) =>
   dsl
-    .apply(controller('', ridMiddleware)) // imported from http package
-)
+    .apply(controller("", ridMiddleware)) // imported from http package
+);
 ```
