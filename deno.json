@@ -6,6 +6,9 @@
   "lint": {
     "rules": {
       "exclude": ["no-explicit-any"]
+    },
+    "files": {
+      "exclude": ["local_dev"]
     }
   }
 }

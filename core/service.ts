@@ -128,4 +128,5 @@ export const createService = <T>(
 ): Service<T> => f(createServiceDsl()).build();
 
 /** Creates a unique token for service */
-export const token = (name = "no name") => Symbol(`Service(${name})`);
+export const token = (name = "no name", scope = "Service") =>
+  Symbol(`${scope}(${name})`);
