@@ -4,10 +4,10 @@ import { Container } from "./container.ts";
 /** Wrapper around container */
 export interface ContainerHelper {
   /** Provides given function with dependencies resolved by tokens in first array */
-  provide: <T>(
+  provide<T>(
     tokens: Array<TokenResolvable>,
     f: (...deps: any[]) => T | Promise<T>,
-  ) => Promise<T>;
+  ): Promise<T>;
 }
 
 /** Creates container helper */

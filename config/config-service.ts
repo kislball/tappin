@@ -10,9 +10,9 @@ import { ConfigSource, configSourceMark } from "./config-source.ts";
 /** Service used to aggregate data from multiple config sources */
 export interface ConfigService {
   /** Gets a key */
-  get: <T>(key: string) => Promise<T | null>;
+  get<T>(key: string): Promise<T | null>;
   /** Gets a key, throws an exception if a key doesn't exist in any of config sources */
-  require: <T>(key: string) => Promise<T>;
+  require<T>(key: string): Promise<T>;
 }
 
 export const configServiceToken = token("ConfigService");

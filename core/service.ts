@@ -26,21 +26,21 @@ export interface Service<T = any> {
 /** DSL used to create service */
 export interface ServiceDsl<T = any> {
   /** Adds dependencies to this DSL */
-  inject: (
+  inject(
     ...tokens: Array<symbol | string | { token: symbol | string }>
-  ) => ServiceDsl<T>;
+  ): ServiceDsl<T>;
   /** Sets scope */
-  scope: (scope: Scope) => ServiceDsl<T>;
+  scope(scope: Scope): ServiceDsl<T>;
   /** Sets injection token */
-  token: (token: string | symbol) => ServiceDsl<T>;
+  token(token: string | symbol): ServiceDsl<T>;
   /** Sets provider function */
-  provide: (f: (...deps: any[]) => Promise<T> | T) => ServiceDsl<T>;
+  provide(f: (...deps: any[]) => Promise<T> | T): ServiceDsl<T>;
   /** Compiles service */
-  build: () => Service<T>;
+  build(): Service<T>;
   /** Sets metadata */
-  set: <V>(key: string | symbol, value: V) => ServiceDsl<T>;
+  set<V>(key: string | symbol, value: V): ServiceDsl<T>;
   /** Applies DSL */
-  apply: (f: (dsl: ServiceDsl<T>) => ServiceDsl<T>) => ServiceDsl<T>;
+  apply(f: (dsl: ServiceDsl<T>) => ServiceDsl<T>): ServiceDsl<T>;
 }
 
 /** Creates service dsl */

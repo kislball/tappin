@@ -10,11 +10,11 @@ import {
 /** Utility for testing Tappin apps */
 export interface Tester {
   /** Gets container */
-  container: () => Container;
+  container(): Container;
   /** Resolves service */
-  resolve: <T>(token: TokenResolvable) => Promise<T>;
+  resolve<T>(token: TokenResolvable): Promise<T>;
   /** Returns helper */
-  helper: () => ContainerHelper;
+  helper(): ContainerHelper;
 }
 
 /** Creates tester from factory */

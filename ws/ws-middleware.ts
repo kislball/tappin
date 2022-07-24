@@ -19,9 +19,9 @@ export interface WsContext<
     data: E[T],
   ) => void;
   /** Adds client to a room */
-  join: (room: string) => Promise<void>;
+  join(room: string): Promise<void>;
   /** Removes client from a room */
-  leave: (room: string) => Promise<void>;
+  leave(room: string): Promise<void>;
 }
 
 /** Websocket middleware */

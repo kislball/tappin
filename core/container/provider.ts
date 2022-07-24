@@ -19,7 +19,7 @@ export interface BaseProvider {
 /** Creates value by calling a function */
 export interface FactoryProvider<T> extends BaseProvider {
   /** Factory */
-  useFactory: (container: Container) => T;
+  useFactory(container: Container): T;
 }
 
 /** Checks if given value is a FactoryProvider */
@@ -37,7 +37,7 @@ export const isValueProvider = (t: any): t is ValueProvider<any> =>
 
 /** Creates value by calling an async function */
 export interface AsyncFactoryProvider<T> extends BaseProvider {
-  useAsyncFactory: (container: Container) => T;
+  useAsyncFactory(container: Container): T;
 }
 
 /** Check if given value is an async provider */

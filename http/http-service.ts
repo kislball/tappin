@@ -22,7 +22,7 @@ import { combine } from "./http-middleware.ts";
 /** HTTP server service */
 export interface HTTPService extends OnDestroy {
   /** Starts this server */
-  start: () => Promise<void>;
+  start(): Promise<void>;
 }
 
 export const httpServiceToken = token("HTTPService");

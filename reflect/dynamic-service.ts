@@ -16,9 +16,9 @@ export const dynamicServiceToken = token("DynamicService");
 /** Service for dynamic loading */
 export interface DynamicService {
   /** Gets a service */
-  get: <T>(token: TokenResolvable) => Promise<T>;
+  get<T>(token: TokenResolvable): Promise<T>;
   /** Dynamically loads a module */
-  load: (m: Module) => Promise<void>;
+  load(m: Module): Promise<void>;
 }
 
 /** Dynamic service */

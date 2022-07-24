@@ -25,17 +25,17 @@ export const stringifyToken = (token: TokenResolvable) => {
 /** Creates application from root module */
 export interface AppFactory {
   /** Initializes app */
-  init: () => Promise<void>;
+  init(): Promise<void>;
   /** Starts app */
-  start: () => Promise<void>;
+  start(): Promise<void>;
   /** Returns container */
-  container: () => Container;
+  container(): Container;
   /** Returns root module */
-  root: () => Module;
+  root(): Module;
   /** Closes application */
-  close: () => Promise<void>;
+  close(): Promise<void>;
   /** Initialized a module */
-  initModule: (m: Module) => Promise<void>;
+  initModule(m: Module): Promise<void>;
 }
 
 /** Creates a new factory */

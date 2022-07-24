@@ -3,7 +3,7 @@ export const onInitToken = Symbol("OnInit");
 
 /** onInit hook interface */
 export interface OnInit {
-  [onInitToken]: () => Promise<void> | void;
+  [onInitToken](): Promise<void> | void;
 }
 
 /** onInit hook mixin */
@@ -23,7 +23,7 @@ export const onStartToken = Symbol("OnStart");
 
 /** onStart hook interface */
 export interface OnStart {
-  [onStartToken]: () => Promise<void> | void;
+  [onStartToken](): Promise<void> | void;
 }
 
 /** onStart hook mixin */
@@ -43,7 +43,7 @@ export const onDestroyToken = Symbol("OnDestroy");
 
 /** onDestroy hook interface */
 export interface OnDestroy {
-  [onDestroyToken]: () => Promise<void> | void;
+  [onDestroyToken](): Promise<void> | void;
 }
 
 /** onDestroy hook mixin */

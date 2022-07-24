@@ -3,17 +3,17 @@ import { Service } from "./service.ts";
 /** Context used during initialization of module */
 export interface ModuleDsl {
   /** Imports another module into this module */
-  import: (m: Module) => ModuleDsl;
+  import(m: Module): ModuleDsl;
   /** Adds a service to this module */
-  service: (s: Service) => ModuleDsl;
+  service(s: Service): ModuleDsl;
   /** Compiles this DSL into module */
-  build: () => Module;
+  build(): Module;
   /** Sets metadata */
-  set: <T>(key: string | symbol, value: T) => ModuleDsl;
+  set<T>(key: string | symbol, value: T): ModuleDsl;
   /** Applies given DSL to this DSL */
-  apply: (f: (dsl: ModuleDsl) => ModuleDsl) => ModuleDsl;
+  apply(f: (dsl: ModuleDsl) => ModuleDsl): ModuleDsl;
   /** Changes name of this module */
-  name: (name: string) => ModuleDsl;
+  name(name: string): ModuleDsl;
 }
 
 /** Module */

@@ -9,17 +9,17 @@ import {
 /** Dependency injection container */
 export interface Container {
   /** Adds a new provider to container */
-  register: <T>(provider: Provider<T>) => Promise<void> | void;
+  register<T>(provider: Provider<T>): Promise<void> | void;
   /** Resolves a provider */
-  resolve: <T>(token: string | symbol) => Promise<T>;
+  resolve<T>(token: string | symbol): Promise<T>;
   /** Cleans up singletons */
-  clearSingletons: () => void;
+  clearSingletons(): void;
   /** Clean up providers */
-  clearProviders: () => void;
+  clearProviders(): void;
   /** Resets container */
-  reset: () => void;
+  reset(): void;
   /** Initializes given singletons */
-  initialize: (which?: Array<string | symbol>) => Promise<any[]>;
+  initialize(which?: Array<string | symbol>): Promise<any[]>;
 }
 
 /** Creates a default container */

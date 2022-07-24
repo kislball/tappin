@@ -11,13 +11,13 @@ export interface WsService {
   /** List of client contexts */
   clients: Map<string, WsContext>;
   /** Emits event globally */
-  emit: <
+  emit<
     E extends Record<string, unknown> = Record<string, any>,
     T extends keyof E = keyof E,
   >(
     eventName: T,
     data: E[T],
-  ) => void;
+  ): void;
 }
 
 export const wsServiceToken = token("WsService");
