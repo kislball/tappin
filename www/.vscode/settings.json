@@ -1,0 +1,6 @@
+{
+  "deno.enable": true,
+  "editor.quickSuggestions": {
+    "strings": true
+  }
+}
